@@ -1,0 +1,126 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'qubitstoai — From NAND gates to AI agents',
+  description = 'Deep, structured computer science from logic gates and circuits all the way to autonomous AI agents.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-md transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
+
+      <a href="/" class="font-display text-base font-700 tracking-tight">
+        <span class="text-zinc-100">qubits</span><span class="text-brand-400">to</span><span class="text-zinc-100">ai</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 text-sm text-zinc-400">
+        <a href="/learn"    class="hover:text-zinc-100 transition-colors">Learn</a>
+        <a href="/blog"     class="hover:text-zinc-100 transition-colors">Blog</a>
+        <a href="/projects" class="hover:text-zinc-100 transition-colors">Projects</a>
+        <a href="/about"    class="hover:text-zinc-100 transition-colors">About</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#newsletter" class="text-sm px-4 py-1.5 rounded-full border border-brand-400/50 text-brand-400 hover:bg-brand-400/10 transition-colors">
+          Subscribe
+        </a>
+        <!-- Mobile menu button -->
+        <button id="menu-btn" class="md:hidden p-1 text-zinc-400 hover:text-zinc-100" aria-label="menu">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-800 bg-zinc-950">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4 text-sm text-zinc-400">
+        <a href="/learn"    class="hover:text-zinc-100">Learn</a>
+        <a href="/blog"     class="hover:text-zinc-100">Blog</a>
+        <a href="/projects" class="hover:text-zinc-100">Projects</a>
+        <a href="/about"    class="hover:text-zinc-100">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  <main class="pt-14">
+    <slot />
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-24">
+    <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <div class="font-display text-lg font-700 mb-3">
+          <span class="text-zinc-100">qubits</span><span class="text-brand-400">to</span><span class="text-zinc-100">ai</span>
+        </div>
+        <p class="text-sm text-zinc-500 leading-relaxed max-w-xs">
+          Computer science from the ground up. No shortcuts, no hand-waving — just deep understanding built layer by layer.
+        </p>
+      </div>
+      <div>
+        <div class="text-xs font-500 text-zinc-500 uppercase tracking-widest mb-4">Learn</div>
+        <ul class="space-y-2 text-sm text-zinc-400">
+          <li><a href="/learn/hardware"  class="hover:text-zinc-100 transition-colors">Hardware</a></li>
+          <li><a href="/learn/systems"   class="hover:text-zinc-100 transition-colors">Systems</a></li>
+          <li><a href="/learn/compilers" class="hover:text-zinc-100 transition-colors">Compilers</a></li>
+          <li><a href="/learn/web"       class="hover:text-zinc-100 transition-colors">Web</a></li>
+          <li><a href="/learn/ml"        class="hover:text-zinc-100 transition-colors">ML</a></li>
+          <li><a href="/learn/agents"    class="hover:text-zinc-100 transition-colors">AI Agents</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-xs font-500 text-zinc-500 uppercase tracking-widest mb-4">Connect</div>
+        <ul class="space-y-2 text-sm text-zinc-400">
+          <li><a href="https://github.com/qubitstoai" class="hover:text-zinc-100 transition-colors">GitHub</a></li>
+          <li><a href="https://youtube.com/@qubitstoai" class="hover:text-zinc-100 transition-colors">YouTube</a></li>
+          <li><a href="https://x.com/qubitstoai" class="hover:text-zinc-100 transition-colors">X / Twitter</a></li>
+          <li><a href="/rss.xml" class="hover:text-zinc-100 transition-colors">RSS</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-zinc-800">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between text-xs text-zinc-600">
+        <span>© 2025 qubitstoai.com · Built in public</span>
+        <span>From NAND gates to AI agents</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+    // Scroll-aware nav
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('nav');
+      nav?.classList.toggle('border-zinc-800/60', window.scrollY > 10);
+      nav?.classList.toggle('border-transparent', window.scrollY <= 10);
+    });
+  </script>
+</body>
+</html>

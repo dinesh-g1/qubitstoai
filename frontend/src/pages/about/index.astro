@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="About — qubitstoai">
+  <div class="max-w-2xl mx-auto px-6 py-16">
+    <div class="mb-12">
+      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">About</div>
+      <h1 class="font-display text-4xl md:text-5xl font-700 tracking-tight">The why</h1>
+    </div>
+
+    <div class="prose prose-invert prose-zinc prose-lg max-w-none
+                prose-headings:font-display prose-headings:font-700
+                prose-a:text-brand-400 prose-a:no-underline hover:prose-a:underline">
+      <p>
+        Most CS education starts too high up the stack. You learn Python, then frameworks, then you're "a developer" — but ask anyone who built their own CPU how differently they think about memory, performance, and abstractions. There's a clarity that only comes from understanding the ground floor.
+      </p>
+      <p>
+        This site is me building that understanding in public, from the very bottom. Every NAND gate, every assembly instruction, every OS scheduler decision — documented as I go, turned into articles and videos so others can follow the same path.
+      </p>
+      <h2>The curriculum</h2>
+      <p>
+        Six tracks, ~30 months, built in sequence. Hardware → Systems → Compilers → Web → ML → AI Agents. Each track assumes the previous one. You could skip around, but you'd be missing context that makes everything click.
+      </p>
+      <h2>What you'll find here</h2>
+      <ul>
+        <li>Long-form articles — each one 8–15 minutes, no padding</li>
+        <li>Working code — every concept has a runnable implementation</li>
+        <li>YouTube videos — visual walkthroughs of the builds</li>
+        <li>Open source repos — everything is on GitHub</li>
+      </ul>
+      <h2>The stack</h2>
+      <p>
+        The site itself is built from scratch — Go backend, Astro frontend, PostgreSQL, self-hosted on a VPS.
+        Because if you're going to teach people how computers work, your own site should be a demonstration of that knowledge.
+      </p>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-zinc-800">
+      <a href="/#newsletter"
+         class="inline-flex items-center gap-2 px-6 py-3 bg-brand-400 hover:bg-brand-600 text-white rounded-lg text-sm font-500 transition-colors">
+        Follow along →
+      </a>
+    </div>
+  </div>
+</Base>

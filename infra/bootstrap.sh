@@ -10,7 +10,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
-REPO="https://github.com/YOUR_GITHUB_USERNAME/qubitstoai.git"
+REPO="https://github.com/dinesh-g1/qubitstoai.git"
 APP_DIR="/srv/qubitstoai"
 DEPLOY_USER="deploy"
 

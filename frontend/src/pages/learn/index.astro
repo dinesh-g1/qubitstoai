@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+const tracks = [
+  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7F77DD', months:'Months 1–3',   lessons: 12 },
+  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#1D9E75', months:'Months 4–8',   lessons: 18 },
+  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#BA7517', months:'Months 9–13',  lessons: 14 },
+  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, React, full-stack projects',  color:'#185FA5', months:'Months 14–20', lessons: 20 },
+  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#993C1D', months:'Months 21–26', lessons: 18 },
+  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#3B6D11', months:'Months 27–30', lessons: 10 },
+];
+---
+<Base title="Learn — qubitstoai">
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <div class="mb-12">
+      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">All tracks</div>
+      <h1 class="font-display text-4xl md:text-5xl font-700 tracking-tight mb-4">The curriculum</h1>
+      <p class="text-zinc-400 text-base max-w-xl leading-relaxed">
+        Six tracks built in sequence. Each one is a prerequisite for the next — hardware foundations make everything above it make sense.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      {tracks.map((track, i) => (
+        <a href={`/learn/${track.slug}`}
+           class="group flex items-center gap-6 p-6 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/30 hover:bg-zinc-900/60 transition-all">
+          <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center font-display font-700 text-xl"
+               style={`background: ${track.color}15; border: 1px solid ${track.color}30; color: ${track.color}`}>
+            {i + 1}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-3 mb-1">
+              <span class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors">{track.title}</span>
+              <span class="text-xs font-mono text-zinc-600">{track.months}</span>
+            </div>
+            <p class="text-sm text-zinc-500 leading-relaxed">{track.desc}</p>
+          </div>
+          <div class="text-right shrink-0 hidden md:block">
+            <div class="text-xs font-mono text-zinc-600">{track.lessons} lessons</div>
+          </div>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+               class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

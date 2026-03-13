@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+const { slug } = Astro.params;
+const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+
+let post: any = null;
+try {
+  const res = await fetch(`${API}/api/v1/posts/${slug}`);
+  if (res.ok) post = await res.json();
+} catch {}
+---
+<Base
+  title={post ? `${post.title} — qubitstoai` : 'Post not found'}
+  description={post?.description}
+>
+  {!post ? (
+    <div class="max-w-4xl mx-auto px-6 py-24 text-center">
+      <div class="font-mono text-zinc-600 text-sm mb-2">// 404</div>
+      <p class="text-zinc-400">Post not found. <a href="/blog" class="text-brand-400 underline">Back to blog</a></p>
+    </div>
+  ) : (
+    <div class="max-w-2xl mx-auto px-6 py-16">
+      <!-- Back -->
+      <a href="/blog" class="text-xs font-mono text-zinc-500 hover:text-brand-400 transition-colors block mb-10">← Blog</a>
+
+      <!-- Header -->
+      <div class="mb-10">
+        <div class="text-xs font-mono text-brand-400/80 mb-3">{post.tag}</div>
+        <h1 class="font-display text-3xl md:text-4xl font-700 tracking-tight leading-tight mb-4">{post.title}</h1>
+        <p class="text-zinc-400 text-lg leading-relaxed">{post.description}</p>
+        <div class="flex items-center gap-4 mt-6 pt-6 border-t border-zinc-800 text-xs font-mono text-zinc-600">
+          <span>{post.read_mins} min read</span>
+          <span>·</span>
+          <span>{new Date(post.created_at).toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      {post.content ? (
+        <article class="prose prose-invert prose-zinc prose-lg max-w-none
+                        prose-headings:font-display prose-headings:font-700 prose-headings:tracking-tight
+                        prose-code:font-mono prose-code:text-brand-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                        prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800
+                        prose-a:text-brand-400 prose-a:no-underline hover:prose-a:underline
+                        prose-blockquote:border-brand-400 prose-blockquote:text-zinc-400"
+                 set:html={post.content} />
+      ) : (
+        <div class="border border-dashed border-zinc-800 rounded-xl p-12 text-center">
+          <div class="font-mono text-zinc-600 text-sm mb-2">// content coming soon</div>
+          <p class="text-zinc-500 text-sm">Full article is being written.</p>
+        </div>
+      )}
+
+      <!-- Next article nudge -->
+      <div class="mt-16 pt-8 border-t border-zinc-800">
+        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-brand-400 transition-colors">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12"/>
+          </svg>
+          All articles
+        </a>
+      </div>
+    </div>
+  )}
+</Base>

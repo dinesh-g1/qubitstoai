@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+const slug = Astro.params.slug;
+
+const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+
+let track: any = null;
+let lessons: any[] = [];
+
+try {
+  const [tr, ls] = await Promise.all([
+    fetch(`${API}/api/v1/tracks/${slug}`).then(r => r.ok ? r.json() : null),
+    fetch(`${API}/api/v1/tracks/${slug}/lessons`).then(r => r.ok ? r.json() : []),
+  ]);
+  track = tr;
+  lessons = ls;
+} catch {}
+
+const trackMeta: Record<string, { months: string; color: string }> = {
+  hardware:  { months: 'Months 1–3',   color: '#7F77DD' },
+  systems:   { months: 'Months 4–8',   color: '#1D9E75' },
+  compilers: { months: 'Months 9–13',  color: '#BA7517' },
+  web:       { months: 'Months 14–20', color: '#185FA5' },
+  ml:        { months: 'Months 21–26', color: '#993C1D' },
+  agents:    { months: 'Months 27–30', color: '#3B6D11' },
+};
+const meta = trackMeta[slug as string] ?? { months: '', color: '#7F77DD' };
+---
+<Base title={track ? `${track.title} — qubitstoai` : 'Track not found'}>
+  <div class="max-w-4xl mx-auto px-6 py-16">
+
+    {!track ? (
+      <div class="text-center py-24">
+        <div class="text-zinc-600 font-mono text-sm mb-2">// 404</div>
+        <p class="text-zinc-400">Track not found. <a href="/learn" class="text-brand-400 underline">Back to all tracks</a></p>
+      </div>
+    ) : (
+      <>
+        <div class="mb-3">
+          <a href="/learn" class="text-xs font-mono text-zinc-500 hover:text-brand-400 transition-colors">← All tracks</a>
+        </div>
+
+        <div class="flex items-start gap-4 mb-10">
+          <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center font-display font-700 text-lg"
+               style={`background: ${meta.color}20; border: 1px solid ${meta.color}40; color: ${meta.color}`}>
+            {slug?.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <div class="text-xs font-mono text-zinc-500 mb-1">{meta.months}</div>
+            <h1 class="font-display text-3xl md:text-4xl font-700 tracking-tight">{track.title}</h1>
+            <p class="text-zinc-400 mt-2 text-base">{track.description}</p>
+          </div>
+        </div>
+
+        <!-- Lessons list -->
+        {lessons.length > 0 ? (
+          <div class="divide-y divide-zinc-800">
+            {lessons.map((lesson: any) => (
+              <a href={`/learn/${slug}/${lesson.slug}`}
+                 class="group flex items-center gap-4 py-5 hover:bg-zinc-900/30 -mx-4 px-4 rounded-lg transition-colors">
+                <span class="font-mono text-xs text-zinc-600 w-8 shrink-0">{String(lesson.sort_order).padStart(2,'0')}</span>
+                <div class="flex-1">
+                  <div class="font-500 text-zinc-100 group-hover:text-brand-400 transition-colors">{lesson.title}</div>
+                  <div class="text-sm text-zinc-500 mt-0.5">{lesson.description}</div>
+                </div>
+                <div class="text-xs text-zinc-600 font-mono shrink-0">{lesson.read_mins} min</div>
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="border border-zinc-800 rounded-xl p-12 text-center">
+            <div class="text-zinc-600 text-sm font-mono mb-2">// lessons coming soon</div>
+            <p class="text-zinc-500 text-sm">This track is being built. Subscribe to get notified when lessons drop.</p>
+            <a href="/#newsletter" class="inline-block mt-4 text-sm text-brand-400 hover:text-brand-200 transition-colors">Subscribe →</a>
+          </div>
+        )}
+      </>
+    )}
+  </div>
+</Base>

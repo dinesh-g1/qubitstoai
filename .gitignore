@@ -1,0 +1,11 @@
+.env
+*.env
+node_modules/
+dist/
+.astro/
+frontend/.astro/
+frontend/dist/
+backend/server
+*.log
+caddy_data/
+caddy_config/

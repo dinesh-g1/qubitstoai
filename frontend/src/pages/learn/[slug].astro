@@ -1,12 +1,11 @@
 ---
+export const prerender = false;
 import Base from '../../layouts/Base.astro';
 const slug = Astro.params.slug;
-
 const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 
 let track: any = null;
 let lessons: any[] = [];
-
 try {
   const [tr, ls] = await Promise.all([
     fetch(`${API}/api/v1/tracks/${slug}`).then(r => r.ok ? r.json() : null),
@@ -28,7 +27,6 @@ const meta = trackMeta[slug as string] ?? { months: '', color: '#7F77DD' };
 ---
 <Base title={track ? `${track.title} — qubitstoai` : 'Track not found'}>
   <div class="max-w-4xl mx-auto px-6 py-16">
-
     {!track ? (
       <div class="text-center py-24">
         <div class="text-zinc-600 font-mono text-sm mb-2">// 404</div>
@@ -36,10 +34,7 @@ const meta = trackMeta[slug as string] ?? { months: '', color: '#7F77DD' };
       </div>
     ) : (
       <>
-        <div class="mb-3">
-          <a href="/learn" class="text-xs font-mono text-zinc-500 hover:text-brand-400 transition-colors">← All tracks</a>
-        </div>
-
+        <a href="/learn" class="text-xs font-mono text-zinc-500 hover:text-brand-400 transition-colors block mb-6">← All tracks</a>
         <div class="flex items-start gap-4 mb-10">
           <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center font-display font-700 text-lg"
                style={`background: ${meta.color}20; border: 1px solid ${meta.color}40; color: ${meta.color}`}>
@@ -48,11 +43,9 @@ const meta = trackMeta[slug as string] ?? { months: '', color: '#7F77DD' };
           <div>
             <div class="text-xs font-mono text-zinc-500 mb-1">{meta.months}</div>
             <h1 class="font-display text-3xl md:text-4xl font-700 tracking-tight">{track.title}</h1>
-            <p class="text-zinc-400 mt-2 text-base">{track.description}</p>
+            <p class="text-zinc-400 mt-2">{track.description}</p>
           </div>
         </div>
-
-        <!-- Lessons list -->
         {lessons.length > 0 ? (
           <div class="divide-y divide-zinc-800">
             {lessons.map((lesson: any) => (
@@ -63,19 +56,14 @@ const meta = trackMeta[slug as string] ?? { months: '', color: '#7F77DD' };
                   <div class="font-500 text-zinc-100 group-hover:text-brand-400 transition-colors">{lesson.title}</div>
                   <div class="text-sm text-zinc-500 mt-0.5">{lesson.description}</div>
                 </div>
-                <div class="text-xs text-zinc-600 font-mono shrink-0">{lesson.read_mins} min</div>
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
-                     class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                </svg>
+                <div class="text-xs text-zinc-600 font-mono">{lesson.read_mins} min</div>
               </a>
             ))}
           </div>
         ) : (
           <div class="border border-zinc-800 rounded-xl p-12 text-center">
             <div class="text-zinc-600 text-sm font-mono mb-2">// lessons coming soon</div>
-            <p class="text-zinc-500 text-sm">This track is being built. Subscribe to get notified when lessons drop.</p>
-            <a href="/#newsletter" class="inline-block mt-4 text-sm text-brand-400 hover:text-brand-200 transition-colors">Subscribe →</a>
+            <a href="/#newsletter" class="text-sm text-brand-400 hover:text-brand-200 transition-colors">Subscribe to get notified →</a>
           </div>
         )}
       </>

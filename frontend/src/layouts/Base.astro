@@ -9,117 +9,165 @@ const {
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <title>{title}</title>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-  <!-- Favicon placeholder -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <style>
+    /* ── Dark theme (default) ── */
+    :root, [data-theme="dark"] {
+      --bg:        #09090b;
+      --bg-card:   #18181b;
+      --bg-hover:  #27272a;
+      --border:    #27272a;
+      --text:      #f4f4f5;
+      --text-muted:#a1a1aa;
+      --text-faint:#52525b;
+      --brand:     #7F77DD;
+      --brand-dim: #534AB7;
+    }
+    /* ── Light theme ── */
+    [data-theme="light"] {
+      --bg:        #fafafa;
+      --bg-card:   #ffffff;
+      --bg-hover:  #f4f4f5;
+      --border:    #e4e4e7;
+      --text:      #09090b;
+      --text-muted:#52525b;
+      --text-faint:#a1a1aa;
+      --brand:     #534AB7;
+      --brand-dim: #3C3489;
+    }
+
+    body           { background: var(--bg); color: var(--text); }
+    .theme-border  { border-color: var(--border); }
+    .theme-card    { background: var(--bg-card); }
+    .theme-muted   { color: var(--text-muted); }
+    .theme-faint   { color: var(--text-faint); }
+    .theme-brand   { color: var(--brand); }
+
+    /* Toggle switch */
+    .toggle-track {
+      width: 40px; height: 22px;
+      background: var(--border);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    [data-theme="light"] .toggle-track { background: var(--brand); }
+    .toggle-thumb {
+      width: 16px; height: 16px;
+      background: var(--text);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px; left: 2px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(18px); }
+  </style>
+  <!-- Apply saved theme before paint to avoid flash -->
+  <script is:inline>
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+  </script>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+<body style="background: var(--bg); color: var(--text); font-family: 'DM Sans', system-ui, sans-serif;">
 
   <!-- NAV -->
-  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-md transition-all duration-300">
-    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
+  <nav id="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;border-bottom:1px solid var(--border);background:color-mix(in srgb, var(--bg) 90%, transparent);backdrop-filter:blur(12px);transition:all 0.3s;">
+    <div style="max-width:72rem;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;">
 
-      <a href="/" class="font-display text-base font-700 tracking-tight">
-        <span class="text-zinc-100">qubits</span><span class="text-brand-400">to</span><span class="text-zinc-100">ai</span>
+      <a href="/" style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;text-decoration:none;color:var(--text);">
+        qubits<span style="color:var(--brand);">to</span>ai
       </a>
 
-      <div class="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-        <a href="/learn"    class="hover:text-zinc-100 transition-colors">Learn</a>
-        <a href="/blog"     class="hover:text-zinc-100 transition-colors">Blog</a>
-        <a href="/projects" class="hover:text-zinc-100 transition-colors">Projects</a>
-        <a href="/about"    class="hover:text-zinc-100 transition-colors">About</a>
-      </div>
+      <div style="display:flex;align-items:center;gap:2rem;">
+        <div style="display:flex;gap:2rem;font-size:0.875rem;color:var(--text-muted);" class="nav-links">
+          <a href="/learn"    style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Learn</a>
+          <a href="/blog"     style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Blog</a>
+          <a href="/projects" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Projects</a>
+          <a href="/about"    style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">About</a>
+        </div>
 
-      <div class="flex items-center gap-3">
-        <a href="#newsletter" class="text-sm px-4 py-1.5 rounded-full border border-brand-400/50 text-brand-400 hover:bg-brand-400/10 transition-colors">
-          Subscribe
-        </a>
-        <!-- Mobile menu button -->
-        <button id="menu-btn" class="md:hidden p-1 text-zinc-400 hover:text-zinc-100" aria-label="menu">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+        <!-- Theme toggle -->
+        <button id="theme-toggle" aria-label="Toggle theme" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px;">
+          <!-- Moon icon -->
+          <svg id="icon-moon" width="14" height="14" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+          </svg>
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+          <!-- Sun icon -->
+          <svg id="icon-sun" width="14" height="14" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/>
           </svg>
         </button>
-      </div>
-    </div>
 
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-zinc-800 bg-zinc-950">
-      <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4 text-sm text-zinc-400">
-        <a href="/learn"    class="hover:text-zinc-100">Learn</a>
-        <a href="/blog"     class="hover:text-zinc-100">Blog</a>
-        <a href="/projects" class="hover:text-zinc-100">Projects</a>
-        <a href="/about"    class="hover:text-zinc-100">About</a>
+        <a href="#newsletter" style="font-size:0.8rem;padding:6px 16px;border-radius:999px;border:1px solid color-mix(in srgb, var(--brand) 50%, transparent);color:var(--brand);text-decoration:none;">
+          Subscribe
+        </a>
       </div>
     </div>
   </nav>
 
-  <!-- PAGE CONTENT -->
-  <main class="pt-14">
+  <main style="padding-top:56px;">
     <slot />
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-zinc-800 mt-24">
-    <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="md:col-span-2">
-        <div class="font-display text-lg font-700 mb-3">
-          <span class="text-zinc-100">qubits</span><span class="text-brand-400">to</span><span class="text-zinc-100">ai</span>
+  <footer style="border-top:1px solid var(--border);margin-top:6rem;">
+    <div style="max-width:72rem;margin:0 auto;padding:3rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;">
+      <div style="grid-column:span 2;">
+        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.75rem;">
+          qubits<span style="color:var(--brand);">to</span>ai
         </div>
-        <p class="text-sm text-zinc-500 leading-relaxed max-w-xs">
-          Computer science from the ground up. No shortcuts, no hand-waving — just deep understanding built layer by layer.
+        <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.6;max-width:20rem;">
+          Computer science from the ground up. No shortcuts — deep understanding built layer by layer.
         </p>
       </div>
       <div>
-        <div class="text-xs font-500 text-zinc-500 uppercase tracking-widest mb-4">Learn</div>
-        <ul class="space-y-2 text-sm text-zinc-400">
-          <li><a href="/learn/hardware"  class="hover:text-zinc-100 transition-colors">Hardware</a></li>
-          <li><a href="/learn/systems"   class="hover:text-zinc-100 transition-colors">Systems</a></li>
-          <li><a href="/learn/compilers" class="hover:text-zinc-100 transition-colors">Compilers</a></li>
-          <li><a href="/learn/web"       class="hover:text-zinc-100 transition-colors">Web</a></li>
-          <li><a href="/learn/ml"        class="hover:text-zinc-100 transition-colors">ML</a></li>
-          <li><a href="/learn/agents"    class="hover:text-zinc-100 transition-colors">AI Agents</a></li>
-        </ul>
+        <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Learn</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;">
+          {['hardware','systems','compilers','web','ml','agents'].map(t => (
+            <a href={`/learn/${t}`} style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">{t.charAt(0).toUpperCase()+t.slice(1)}</a>
+          ))}
+        </div>
       </div>
       <div>
-        <div class="text-xs font-500 text-zinc-500 uppercase tracking-widest mb-4">Connect</div>
-        <ul class="space-y-2 text-sm text-zinc-400">
-          <li><a href="https://github.com/qubitstoai" class="hover:text-zinc-100 transition-colors">GitHub</a></li>
-          <li><a href="https://youtube.com/@qubitstoai" class="hover:text-zinc-100 transition-colors">YouTube</a></li>
-          <li><a href="https://x.com/qubitstoai" class="hover:text-zinc-100 transition-colors">X / Twitter</a></li>
-          <li><a href="/rss.xml" class="hover:text-zinc-100 transition-colors">RSS</a></li>
-        </ul>
+        <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Connect</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;">
+          <a href="https://github.com/qubitstoai" style="color:var(--text-muted);text-decoration:none;">GitHub</a>
+          <a href="https://youtube.com/@qubitstoai" style="color:var(--text-muted);text-decoration:none;">YouTube</a>
+          <a href="https://x.com/qubitstoai" style="color:var(--text-muted);text-decoration:none;">X / Twitter</a>
+        </div>
       </div>
     </div>
-    <div class="border-t border-zinc-800">
-      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between text-xs text-zinc-600">
-        <span>© 2025 qubitstoai.com · Built in public</span>
+    <div style="border-top:1px solid var(--border);">
+      <div style="max-width:72rem;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-faint);">
+        <span>© 2025 qubitstoai.com</span>
         <span>From NAND gates to AI agents</span>
       </div>
     </div>
   </footer>
 
   <script>
-    // Mobile menu toggle
-    document.getElementById('menu-btn')?.addEventListener('click', () => {
-      document.getElementById('mobile-menu')?.classList.toggle('hidden');
-    });
-    // Scroll-aware nav
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('nav');
-      nav?.classList.toggle('border-zinc-800/60', window.scrollY > 10);
-      nav?.classList.toggle('border-transparent', window.scrollY <= 10);
+    // Theme toggle
+    const btn = document.getElementById('theme-toggle');
+    btn?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
     });
   </script>
 </body>

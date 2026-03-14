@@ -9,7 +9,7 @@ const {
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="en" class="scroll-smooth" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,144 +17,426 @@ const {
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
   <style>
-    /* ── Dark theme (default) ── */
-    :root, [data-theme="dark"] {
-      --bg:        #09090b;
-      --bg-card:   #18181b;
-      --bg-hover:  #27272a;
-      --border:    #27272a;
-      --text:      #f4f4f5;
-      --text-muted:#a1a1aa;
-      --text-faint:#52525b;
-      --brand:     #7F77DD;
-      --brand-dim: #534AB7;
+    /* ─── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    /* ─── Fonts ─────────────────────────────────────────── */
+    :root {
+      --font-body:    'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+      --text-xs:   0.8rem;    /* 12.8px — labels, tags, meta */
+      --text-sm:   0.9375rem; /* 15px   — secondary text */
+      --text-base: 1.0625rem; /* 17px   — body copy */
+      --text-lg:   1.1875rem; /* 19px   — lead paragraphs */
+      --text-xl:   1.375rem;  /* 22px   — small headings */
+      --text-2xl:  1.75rem;   /* 28px   — section headings */
+      --text-3xl:  2.25rem;   /* 36px   — page headings */
+      --text-4xl:  3rem;      /* 48px   — hero headings */
+      --text-5xl:  3.75rem;   /* 60px   — display */
+
+      --leading-tight:  1.15;
+      --leading-snug:   1.35;
+      --leading-normal: 1.6;
+      --leading-loose:  1.8;
     }
-    /* ── Light theme ── */
+
+    /* ─── Dark theme ────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:           #0f1117;   /* warm deep navy, not pure black */
+      --bg-subtle:    #161b27;   /* slightly lighter for cards */
+      --bg-hover:     #1d2233;   /* hover state */
+      --border:       #2a3045;   /* visible but not harsh */
+      --border-light: #1e2436;   /* very subtle dividers */
+
+      --text-primary:  #e8eaf0;  /* near-white with a slight blue tint — easy on eyes */
+      --text-secondary:#9ba3b8;  /* medium — for descriptions */
+      --text-muted:    #5c6480;  /* dim — for meta, timestamps */
+
+      --accent:        #7c6ff7;  /* indigo-violet — main brand */
+      --accent-hover:  #9b91f9;  /* lighter on hover */
+      --accent-dim:    #2d2860;  /* for backgrounds behind accent */
+      --accent-border: #4a44a0;  /* for bordered elements */
+
+      --tag-hardware:  #6366f1;
+      --tag-systems:   #14b8a6;
+      --tag-compilers: #f59e0b;
+      --tag-web:       #3b82f6;
+      --tag-ml:        #f97316;
+      --tag-agents:    #22c55e;
+
+      color-scheme: dark;
+    }
+
+    /* ─── Light theme ───────────────────────────────────── */
     [data-theme="light"] {
-      --bg:        #fafafa;
-      --bg-card:   #ffffff;
-      --bg-hover:  #f4f4f5;
-      --border:    #e4e4e7;
-      --text:      #09090b;
-      --text-muted:#52525b;
-      --text-faint:#a1a1aa;
-      --brand:     #534AB7;
-      --brand-dim: #3C3489;
+      --bg:           #f7f6f3;   /* warm off-white, not stark white */
+      --bg-subtle:    #ffffff;   /* cards and panels */
+      --bg-hover:     #eeede8;   /* hover state */
+      --border:       #dddbd4;   /* warm grey borders */
+      --border-light: #e8e6e0;
+
+      --text-primary:  #1a1a2e;  /* deep navy-black — strong contrast */
+      --text-secondary:#4a4a6a;  /* medium — very readable */
+      --text-muted:    #8a8a9a;  /* dim — for meta */
+
+      --accent:        #4338ca;  /* deeper indigo — pops on light bg */
+      --accent-hover:  #3730a3;
+      --accent-dim:    #eef2ff;
+      --accent-border: #a5b4fc;
+
+      --tag-hardware:  #4f46e5;
+      --tag-systems:   #0d9488;
+      --tag-compilers: #d97706;
+      --tag-web:       #2563eb;
+      --tag-ml:        #ea580c;
+      --tag-agents:    #16a34a;
+
+      color-scheme: light;
     }
 
-    body           { background: var(--bg); color: var(--text); }
-    .theme-border  { border-color: var(--border); }
-    .theme-card    { background: var(--bg-card); }
-    .theme-muted   { color: var(--text-muted); }
-    .theme-faint   { color: var(--text-faint); }
-    .theme-brand   { color: var(--brand); }
+    /* ─── Base styles ───────────────────────────────────── */
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-normal);
+      background: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
 
-    /* Toggle switch */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      line-height: var(--leading-tight);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    code, pre, .mono {
+      font-family: var(--font-mono);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Nav ───────────────────────────────────────────── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: 60px;
+      border-bottom: 1px solid var(--border-light);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color 0.3s, background 0.2s;
+    }
+    #nav .inner {
+      max-width: 72rem; margin: 0 auto; padding: 0 1.75rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem; font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 2.25rem; }
+    .nav-links a {
+      font-size: var(--text-sm); font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    /* Subscribe pill */
+    .nav-subscribe {
+      font-size: var(--text-xs); font-weight: 600;
+      padding: 7px 18px; border-radius: 999px;
+      border: 1.5px solid var(--accent-border);
+      color: var(--accent);
+      transition: background 0.15s, color 0.15s;
+      font-family: var(--font-body);
+    }
+    .nav-subscribe:hover {
+      background: var(--accent-dim);
+    }
+
+    /* ─── Theme toggle ──────────────────────────────────── */
+    .theme-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; border-radius: 6px;
+    }
     .toggle-track {
-      width: 40px; height: 22px;
+      width: 44px; height: 24px;
       background: var(--border);
       border-radius: 999px;
       position: relative;
-      cursor: pointer;
-      transition: background 0.2s;
-      border: 1px solid var(--border);
-      flex-shrink: 0;
+      transition: background 0.25s;
+      border: 1.5px solid var(--border);
     }
-    [data-theme="light"] .toggle-track { background: var(--brand); }
+    [data-theme="light"] .toggle-track {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
     .toggle-thumb {
-      width: 16px; height: 16px;
-      background: var(--text);
+      width: 18px; height: 18px;
+      background: var(--bg-subtle);
       border-radius: 50%;
-      position: absolute;
-      top: 2px; left: 2px;
-      transition: transform 0.2s, background 0.2s;
+      position: absolute; top: 1px; left: 1px;
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
-    [data-theme="light"] .toggle-thumb { transform: translateX(18px); }
+    [data-theme="light"] .toggle-thumb {
+      transform: translateX(20px);
+    }
+    .toggle-icon {
+      color: var(--text-muted);
+      transition: color 0.2s;
+      display: flex; align-items: center;
+    }
+    [data-theme="dark"]  .icon-moon { color: var(--accent); }
+    [data-theme="light"] .icon-sun  { color: var(--accent); }
+
+    /* ─── Mobile menu ───────────────────────────────────── */
+    #mobile-menu {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    #mobile-menu.open { display: block; }
+    #mobile-menu .inner {
+      max-width: 72rem; margin: 0 auto;
+      padding: 1.25rem 1.75rem;
+      display: flex; flex-direction: column; gap: 1.1rem;
+    }
+    #mobile-menu a {
+      font-size: var(--text-base); font-weight: 500;
+      color: var(--text-secondary);
+    }
+    #mobile-menu a:hover { color: var(--text-primary); }
+
+    /* ─── Footer ────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 7rem;
+      background: var(--bg-subtle);
+    }
+    footer .grid {
+      max-width: 72rem; margin: 0 auto;
+      padding: 3.5rem 1.75rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2.5rem;
+    }
+    footer .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+    footer .footer-logo span { color: var(--accent); }
+    footer .footer-desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: var(--leading-loose);
+      max-width: 22rem;
+    }
+    footer .footer-heading {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1.1rem;
+    }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    footer ul a {
+      font-size: var(--text-sm); font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+    footer ul a:hover { color: var(--accent); }
+    footer .bottom {
+      border-top: 1px solid var(--border);
+    }
+    footer .bottom-inner {
+      max-width: 72rem; margin: 0 auto;
+      padding: 1rem 1.75rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* ─── Responsive ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-subscribe { display: none; }
+      footer .grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 769px) {
+      #menu-btn { display: none; }
+    }
+
+    /* ─── Prose (articles/blog) ─────────────────────────── */
+    .prose {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-loose);
+      color: var(--text-primary);
+    }
+    .prose h1, .prose h2, .prose h3 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      margin-top: 2.5em; margin-bottom: 0.75em;
+    }
+    .prose h1 { font-size: var(--text-3xl); }
+    .prose h2 { font-size: var(--text-2xl); }
+    .prose h3 { font-size: var(--text-xl); }
+    .prose p  { margin-bottom: 1.4em; color: var(--text-secondary); }
+    .prose a  { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .prose code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: var(--bg-hover);
+      color: var(--accent-hover);
+      padding: 2px 7px; border-radius: 4px;
+    }
+    .prose pre {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.75em 0;
+    }
+    .prose pre code { background: none; padding: 0; color: var(--text-primary); }
+    .prose blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 2em 0; padding: 0.5em 1.5em;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    .prose ul, .prose ol {
+      margin: 1.25em 0 1.25em 1.5em;
+      color: var(--text-secondary);
+    }
+    .prose li { margin-bottom: 0.5em; }
+    .prose strong { color: var(--text-primary); font-weight: 600; }
+    .prose hr {
+      border: none; border-top: 1px solid var(--border);
+      margin: 2.5em 0;
+    }
   </style>
-  <!-- Apply saved theme before paint to avoid flash -->
+
+  <!-- Apply saved theme before paint — prevents flash -->
   <script is:inline>
-    const saved = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', saved);
+    try {
+      const t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
   </script>
 </head>
-<body style="background: var(--bg); color: var(--text); font-family: 'DM Sans', system-ui, sans-serif;">
 
-  <!-- NAV -->
-  <nav id="nav" style="position:fixed;top:0;left:0;right:0;z-index:50;border-bottom:1px solid var(--border);background:color-mix(in srgb, var(--bg) 90%, transparent);backdrop-filter:blur(12px);transition:all 0.3s;">
-    <div style="max-width:72rem;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;">
+<body>
+  <!-- ── NAV ──────────────────────────────────────────────── -->
+  <nav id="nav">
+    <div class="inner">
+      <a href="/" class="nav-logo">qubits<span>to</span>ai</a>
 
-      <a href="/" style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;text-decoration:none;color:var(--text);">
-        qubits<span style="color:var(--brand);">to</span>ai
-      </a>
+      <div class="nav-links">
+        <a href="/learn">Learn</a>
+        <a href="/blog">Blog</a>
+        <a href="/projects">Projects</a>
+        <a href="/about">About</a>
+      </div>
 
-      <div style="display:flex;align-items:center;gap:2rem;">
-        <div style="display:flex;gap:2rem;font-size:0.875rem;color:var(--text-muted);" class="nav-links">
-          <a href="/learn"    style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Learn</a>
-          <a href="/blog"     style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Blog</a>
-          <a href="/projects" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">Projects</a>
-          <a href="/about"    style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">About</a>
-        </div>
-
+      <div class="nav-right">
         <!-- Theme toggle -->
-        <button id="theme-toggle" aria-label="Toggle theme" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px;">
-          <!-- Moon icon -->
-          <svg id="icon-moon" width="14" height="14" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
-          </svg>
-          <div class="toggle-track">
-            <div class="toggle-thumb"></div>
-          </div>
-          <!-- Sun icon -->
-          <svg id="icon-sun" width="14" height="14" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/>
-          </svg>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-icon icon-moon">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+            </svg>
+          </span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          <span class="toggle-icon icon-sun">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"/>
+              <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/>
+            </svg>
+          </span>
         </button>
 
-        <a href="#newsletter" style="font-size:0.8rem;padding:6px 16px;border-radius:999px;border:1px solid color-mix(in srgb, var(--brand) 50%, transparent);color:var(--brand);text-decoration:none;">
-          Subscribe
-        </a>
+        <a href="#newsletter" class="nav-subscribe">Subscribe</a>
+
+        <!-- Mobile hamburger -->
+        <button id="menu-btn" aria-label="Open menu" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text-secondary);">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <main style="padding-top:56px;">
+  <!-- Mobile menu -->
+  <div id="mobile-menu">
+    <div class="inner">
+      <a href="/learn">Learn</a>
+      <a href="/blog">Blog</a>
+      <a href="/projects">Projects</a>
+      <a href="/about">About</a>
+    </div>
+  </div>
+
+  <!-- ── CONTENT ───────────────────────────────────────────── -->
+  <main style="padding-top: 60px;">
     <slot />
   </main>
 
-  <!-- FOOTER -->
-  <footer style="border-top:1px solid var(--border);margin-top:6rem;">
-    <div style="max-width:72rem;margin:0 auto;padding:3rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2rem;">
-      <div style="grid-column:span 2;">
-        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.75rem;">
-          qubits<span style="color:var(--brand);">to</span>ai
-        </div>
-        <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.6;max-width:20rem;">
-          Computer science from the ground up. No shortcuts — deep understanding built layer by layer.
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <div class="grid">
+      <div>
+        <div class="footer-logo">qubits<span>to</span>ai</div>
+        <p class="footer-desc">
+          Computer science from the ground up. No shortcuts, no hand-waving — deep understanding built layer by layer.
         </p>
       </div>
       <div>
-        <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Learn</div>
-        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;">
-          {['hardware','systems','compilers','web','ml','agents'].map(t => (
-            <a href={`/learn/${t}`} style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">{t.charAt(0).toUpperCase()+t.slice(1)}</a>
-          ))}
-        </div>
+        <div class="footer-heading">Learn</div>
+        <ul>
+          <li><a href="/learn/hardware">Hardware</a></li>
+          <li><a href="/learn/systems">Systems</a></li>
+          <li><a href="/learn/compilers">Compilers</a></li>
+          <li><a href="/learn/web">Web</a></li>
+          <li><a href="/learn/ml">ML</a></li>
+          <li><a href="/learn/agents">AI Agents</a></li>
+        </ul>
       </div>
       <div>
-        <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Connect</div>
-        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;">
-          <a href="https://github.com/qubitstoai" style="color:var(--text-muted);text-decoration:none;">GitHub</a>
-          <a href="https://youtube.com/@qubitstoai" style="color:var(--text-muted);text-decoration:none;">YouTube</a>
-          <a href="https://x.com/qubitstoai" style="color:var(--text-muted);text-decoration:none;">X / Twitter</a>
-        </div>
+        <div class="footer-heading">Connect</div>
+        <ul>
+          <li><a href="https://github.com/qubitstoai">GitHub</a></li>
+          <li><a href="https://youtube.com/@qubitstoai">YouTube</a></li>
+          <li><a href="https://x.com/qubitstoai">X / Twitter</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
       </div>
     </div>
-    <div style="border-top:1px solid var(--border);">
-      <div style="max-width:72rem;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-faint);">
-        <span>© 2025 qubitstoai.com</span>
+    <div class="bottom">
+      <div class="bottom-inner">
+        <span>© 2025 qubitstoai.com · Built in public</span>
         <span>From NAND gates to AI agents</span>
       </div>
     </div>
@@ -162,12 +444,17 @@ const {
 
   <script>
     // Theme toggle
-    const btn = document.getElementById('theme-toggle');
-    btn?.addEventListener('click', () => {
+    const toggle = document.getElementById('theme-toggle');
+    toggle?.addEventListener('click', () => {
       const html = document.documentElement;
       const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+    });
+
+    // Mobile menu
+    document.getElementById('menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('open');
     });
   </script>
 </body>

@@ -1,6 +1,11 @@
+# Force HTTP → HTTPS redirect
+http://qubitstoai.com, http://www.qubitstoai.com {
+    redir https://{host}{uri} permanent
+}
+
+# Main HTTPS site
 qubitstoai.com, www.qubitstoai.com {
 
-    # ── API routes → Go backend ─────────────────────────────────────────────
     handle /api/* {
         reverse_proxy backend:8080
     }
@@ -9,31 +14,18 @@ qubitstoai.com, www.qubitstoai.com {
         reverse_proxy backend:8080
     }
 
-    # ── Everything else → Astro frontend ───────────────────────────────────
     handle {
         reverse_proxy frontend:3000
     }
 
-    # ── Security headers ────────────────────────────────────────────────────
     header {
         X-Content-Type-Options    "nosniff"
         X-Frame-Options           "DENY"
         X-XSS-Protection          "1; mode=block"
         Referrer-Policy           "strict-origin-when-cross-origin"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         -Server
     }
 
-    # ── Compression ─────────────────────────────────────────────────────────
     encode gzip
-
-    # ── Logging ─────────────────────────────────────────────────────────────
-    log {
-        output file /var/log/caddy/access.log {
-            roll_size     100mb
-            roll_keep     10
-            roll_keep_for 720h
-        }
-        format json
-    }
 }

@@ -1,6 +1,5 @@
 services:
 
-  # ── PostgreSQL ──────────────────────────────────────────────────────────────
   db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -16,19 +15,12 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── Redis ───────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
       - redisdata:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
 
-  # ── Go backend ──────────────────────────────────────────────────────────────
   backend:
     build:
       context: ./backend
@@ -38,15 +30,13 @@ services:
       PORT:         "8080"
       DATABASE_URL: postgres://qubitstoai:${DB_PASSWORD}@db:5432/qubitstoai?sslmode=disable
       REDIS_URL:    redis://redis:6379
+      JWT_SECRET:   ${JWT_SECRET}
     depends_on:
       db:
-        condition: service_healthy
-      redis:
         condition: service_healthy
     expose:
       - "8080"
 
-  # ── Astro frontend ──────────────────────────────────────────────────────────
   frontend:
     build:
       context: ./frontend
@@ -61,7 +51,6 @@ services:
     expose:
       - "3000"
 
-  # ── Caddy reverse proxy (handles HTTPS automatically) ───────────────────────
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped

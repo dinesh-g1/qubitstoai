@@ -1,40 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
 const tracks = [
-  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7F77DD' },
-  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#1D9E75' },
-  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#BA7517' },
-  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, system design, architecture', color:'#185FA5' },
-  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#993C1D' },
-  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#3B6D11' },
+  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7C3AED' },
+  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#059669' },
+  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#D97706' },
+  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, system design, architecture', color:'#2563EB' },
+  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#DC2626' },
+  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#16A34A' },
 ];
 ---
 <Base title="Learn — qubitstoai">
-  <div class="max-w-4xl mx-auto px-6 py-16">
-    <div class="mb-12">
-      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">Exploring</div>
-      <h1 class="font-display text-4xl md:text-5xl font-700 tracking-tight mb-4">Topics I explore</h1>
-      <p class="text-zinc-400 text-base max-w-xl leading-relaxed">
-        Areas I find genuinely interesting — started from hardware because I wanted to understand how everything actually works.
-      </p>
+  <div style="max-width:52rem;margin:0 auto;padding:4rem 1.75rem 6rem;">
+    <div style="margin-bottom:3rem;">
+      <div class="label" style="margin-bottom:0.6rem;">Exploring</div>
+      <h1 style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.75rem;">Topics I explore</h1>
+      <p style="color:var(--ink-3);font-size:var(--text-base);max-width:440px;line-height:1.7;">Areas I find genuinely interesting — started from hardware because I wanted to understand how everything actually works.</p>
     </div>
-
-    <div class="flex flex-col gap-4">
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
       {tracks.map((track, i) => (
-        <a href={`/learn/${track.slug}`}
-           class="group flex items-center gap-6 p-6 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/30 hover:bg-zinc-900/60 transition-all">
-          <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center font-display font-700 text-xl"
-               style={`background: ${track.color}15; border: 1px solid ${track.color}30; color: ${track.color}`}>
-            {i + 1}
+        <a href={`/learn/${track.slug}`} style="display:flex;align-items:center;gap:1.25rem;padding:1.25rem 1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2C0BA';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.07)';this.style.transform='translateX(3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';this.style.transform='none'">
+          <div style={`width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.1rem;flex-shrink:0;background:${track.color}12;color:${track.color};border:1px solid ${track.color}22`}>{i+1}</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:0.25rem;">{track.title}</div>
+            <div style="font-size:var(--text-sm);color:var(--ink-4);">{track.desc}</div>
           </div>
-          <div class="flex-1 min-w-0">
-            <span class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors">{track.title}</span>
-            <p class="text-sm text-zinc-500 leading-relaxed mt-1">{track.desc}</p>
-          </div>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
-               class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
+          <svg width="15" height="15" fill="none" stroke="var(--ink-4)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </a>
       ))}
     </div>

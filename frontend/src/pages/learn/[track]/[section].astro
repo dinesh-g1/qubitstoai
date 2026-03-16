@@ -1,0 +1,79 @@
+export const prerender = false;
+---
+import Base from '../../../layouts/Base.astro';
+const { track: trackSlug, section: sectionSlug } = Astro.params;
+const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+
+let track: any = null;
+let section: any = null;
+let posts: any[] = [];
+
+try {
+  const [tr, sections, ps] = await Promise.all([
+    fetch(`${API}/api/v1/tracks/${trackSlug}`).then(r => r.ok ? r.json() : null),
+    fetch(`${API}/api/v1/tracks/${trackSlug}/sections`).then(r => r.ok ? r.json() : []),
+    fetch(`${API}/api/v1/tracks/${trackSlug}/sections/${sectionSlug}/posts`).then(r => r.ok ? r.json() : []),
+  ]);
+  track = tr;
+  section = (sections as any[]).find((s: any) => s.slug === sectionSlug) || null;
+  posts = ps;
+} catch {}
+
+const trackColors: Record<string, string> = {
+  hardware:'#7F77DD', systems:'#1D9E75', compilers:'#BA7517',
+  web:'#185FA5', ml:'#993C1D', agents:'#3B6D11',
+};
+const color = trackColors[trackSlug as string] ?? '#7F77DD';
+---
+<Base title={section ? `${section.title} — qubitstoai` : 'Not found'}>
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    {!track || !section ? (
+      <div class="text-center py-24">
+        <div class="text-zinc-600 font-mono text-sm mb-2">// 404</div>
+        <p class="text-zinc-400">Not found. <a href="/learn" class="text-brand-400 underline">Back to topics</a></p>
+      </div>
+    ) : (
+      <>
+        <div class="flex items-center gap-2 text-xs font-mono text-zinc-600 mb-8">
+          <a href="/learn" class="hover:text-brand-400 transition-colors">Learn</a>
+          <span>/</span>
+          <a href={`/learn/${trackSlug}`} class="hover:text-brand-400 transition-colors">{track.title}</a>
+          <span>/</span>
+          <span class="text-zinc-400">{section.title}</span>
+        </div>
+        <div class="mb-12">
+          <div class="inline-block text-xs font-mono px-3 py-1 rounded-full mb-4"
+               style={`background:${color}15;color:${color};border:1px solid ${color}30`}>
+            {track.title}
+          </div>
+          <h1 class="font-display text-3xl md:text-4xl font-700 tracking-tight mb-3">{section.title}</h1>
+          <p class="text-zinc-400 text-base leading-relaxed">{section.description}</p>
+        </div>
+        {posts.length > 0 ? (
+          <div class="divide-y divide-zinc-800">
+            {posts.map((post: any, i: number) => (
+              <a href={`/blog/${post.slug}`}
+                 class="group flex items-start gap-5 py-6 hover:bg-zinc-900/30 -mx-4 px-4 rounded-lg transition-colors">
+                <span class="font-mono text-xs text-zinc-700 mt-1 w-6 shrink-0">{String(i+1).padStart(2,'0')}</span>
+                <div class="flex-1 min-w-0">
+                  <h2 class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors leading-snug text-lg">{post.title}</h2>
+                  {post.description && <p class="text-sm text-zinc-500 mt-1 leading-relaxed">{post.description}</p>}
+                  <div class="text-xs font-mono text-zinc-700 mt-2">{post.read_mins} min read</div>
+                </div>
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors mt-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="border border-dashed border-zinc-800 rounded-xl p-14 text-center">
+            <div class="text-zinc-600 font-mono text-sm mb-2">// no articles yet</div>
+            <p class="text-zinc-500 text-sm">Articles are being written. <a href="/#newsletter" class="text-brand-400 hover:text-brand-200 transition-colors">Subscribe →</a></p>
+          </div>
+        )}
+      </>
+    )}
+  </div>
+</Base>

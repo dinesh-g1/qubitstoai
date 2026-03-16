@@ -1,0 +1,210 @@
+export const prerender = false;
+---
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>New post — qubitstoai admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <script is:inline>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark')}catch(e){}</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--font-body:'Plus Jakarta Sans',system-ui,sans-serif;--font-display:'Fraunces',Georgia,serif;--font-mono:'JetBrains Mono',monospace}
+    [data-theme="dark"]{--bg:#0f1117;--bg-subtle:#161b27;--bg-hover:#1d2233;--border:#2a3045;--border-light:#1e2436;--text-primary:#e8eaf0;--text-secondary:#9ba3b8;--text-muted:#5c6480;--accent:#7c6ff7;--accent-hover:#9b91f9;--accent-dim:#2d2860;--accent-border:#4a44a0}
+    [data-theme="light"]{--bg:#f7f6f3;--bg-subtle:#ffffff;--bg-hover:#eeede8;--border:#dddbd4;--text-primary:#1a1a2e;--text-secondary:#4a4a6a;--text-muted:#8a8a9a;--accent:#4338ca;--accent-hover:#3730a3;--accent-dim:#eef2ff;--accent-border:#a5b4fc}
+    body{font-family:var(--font-body);font-size:1rem;background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:220px;flex-shrink:0;background:var(--bg-subtle);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:0.35rem;position:fixed;top:0;bottom:0}
+    .sidebar-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:700;padding:0 0.5rem;margin-bottom:1.5rem}
+    .sidebar-logo span{color:var(--accent)}
+    .nav-item{display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border-radius:8px;font-size:0.9rem;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background 0.15s,color 0.15s}
+    .nav-item:hover,.nav-item.active{background:var(--bg-hover);color:var(--accent)}
+    .main{margin-left:220px;flex:1;padding:2.5rem;max-width:860px}
+    .back{font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;display:inline-flex;align-items:center;gap:6px}
+    .back:hover{color:var(--accent)}
+    h1{font-family:var(--font-display);font-size:1.75rem;font-weight:700;margin-bottom:2rem}
+    .field{margin-bottom:1.5rem}
+    label{display:block;font-size:0.85rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.5rem}
+    .hint{font-size:0.78rem;color:var(--text-muted);margin-top:0.35rem}
+    input,select,textarea{width:100%;padding:11px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;font-family:var(--font-body);font-size:0.9375rem;color:var(--text-primary);outline:none;transition:border-color 0.15s}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+    input::placeholder,textarea::placeholder{color:var(--text-muted)}
+    select option{background:var(--bg-subtle)}
+    textarea{resize:vertical;font-family:var(--font-mono);font-size:0.875rem;line-height:1.6;min-height:400px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+    .footer-bar{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--border);margin-top:1.5rem}
+    .btn{padding:11px 24px;border-radius:9px;font-family:var(--font-body);font-size:0.9375rem;font-weight:600;cursor:pointer;border:none;transition:background 0.15s}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:var(--accent-hover)}
+    .btn-ghost{background:none;border:1.5px solid var(--border);color:var(--text-secondary)}
+    .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+    .publish-toggle{display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;font-weight:500;color:var(--text-secondary)}
+    .toggle-wrap{position:relative;width:44px;height:24px;cursor:pointer}
+    .toggle-wrap input{opacity:0;width:0;height:0;position:absolute}
+    .slider{position:absolute;inset:0;background:var(--border);border-radius:999px;transition:background 0.2s}
+    .slider::before{content:'';position:absolute;width:18px;height:18px;top:3px;left:3px;background:white;border-radius:50%;transition:transform 0.2s}
+    input:checked + .slider{background:var(--accent)}
+    input:checked + .slider::before{transform:translateX(20px)}
+    .err{color:#f87171;font-size:0.875rem;margin-top:1rem;display:none}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">qubits<span>to</span>ai</div>
+    <a href="/admin/dashboard" class="nav-item">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/posts/new" class="nav-item active">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/></svg>
+      New post
+    </a>
+  </aside>
+
+  <main class="main">
+    <a href="/admin/dashboard" class="back">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12"/></svg>
+      Back to dashboard
+    </a>
+    <h1>New post</h1>
+
+    <form id="form">
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="title" placeholder="Post title..." required/>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <input type="text" id="description" placeholder="One-line summary shown in listings..."/>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Track</label>
+          <select id="track">
+            <option value="">— No track —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Section</label>
+          <select id="section">
+            <option value="">— No section —</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Tag</label>
+          <input type="text" id="tag" placeholder="e.g. LLD, HLD, Hardware..."/>
+        </div>
+        <div class="field">
+          <label>Read time (mins)</label>
+          <input type="number" id="read_mins" value="5" min="1" max="120"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Content (HTML supported)</label>
+        <textarea id="content" placeholder="Write your post content here. HTML tags are supported — <h2>, <p>, <code>, <pre>, <ul>, etc."></textarea>
+        <div class="hint">Tip: wrap code blocks in &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;</div>
+      </div>
+
+      <div class="footer-bar">
+        <label class="publish-toggle">
+          <div class="toggle-wrap">
+            <input type="checkbox" id="published"/>
+            <span class="slider"></span>
+          </div>
+          Publish immediately
+        </label>
+        <div style="display:flex;gap:0.75rem">
+          <a href="/admin/dashboard" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save post →</button>
+        </div>
+      </div>
+      <div class="err" id="err"></div>
+    </form>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem('admin_token');
+  if (!token) window.location.href = '/admin/login';
+
+  // Load tracks and sections
+  let tracksData = [];
+  let sectionsData = [];
+
+  async function loadTracks() {
+    const res = await fetch('/api/v1/tracks');
+    tracksData = await res.json();
+    const sel = document.getElementById('track');
+    tracksData.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.title;
+      sel.appendChild(opt);
+    });
+  }
+
+  document.getElementById('track').addEventListener('change', async (e) => {
+    const trackId = e.target.value;
+    const sectionSel = document.getElementById('section');
+    sectionSel.innerHTML = '<option value="">— No section —</option>';
+    if (!trackId) return;
+    const track = tracksData.find(t => t.id == trackId);
+    if (!track) return;
+    const res = await fetch(`/api/v1/tracks/${track.slug}/sections`);
+    sectionsData = await res.json();
+    sectionsData.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.title;
+      sectionSel.appendChild(opt);
+    });
+  });
+
+  document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = document.getElementById('err');
+    err.style.display = 'none';
+
+    const trackVal = document.getElementById('track').value;
+    const sectionVal = document.getElementById('section').value;
+
+    const body = {
+      title:       document.getElementById('title').value,
+      description: document.getElementById('description').value,
+      content:     document.getElementById('content').value,
+      tag:         document.getElementById('tag').value || 'General',
+      read_mins:   parseInt(document.getElementById('read_mins').value) || 5,
+      published:   document.getElementById('published').checked,
+      track_id:    trackVal   ? parseInt(trackVal)   : null,
+      section_id:  sectionVal ? parseInt(sectionVal) : null,
+    };
+
+    const res = await fetch('/api/v1/admin/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      err.textContent = data.error || 'Failed to save post';
+      err.style.display = 'block';
+      return;
+    }
+    window.location.href = '/admin/dashboard';
+  });
+
+  loadTracks();
+</script>
+</body>
+</html>

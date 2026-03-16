@@ -1,6 +1,7 @@
 # ── Build stage ──────────────────────────────────────────────────────────────
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
+# Copy only go.mod — Docker will fetch and verify dependencies itself
 COPY go.mod ./
 RUN go mod download && go mod verify
 COPY . .

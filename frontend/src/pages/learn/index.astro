@@ -1,12 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 const tracks = [
-  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7F77DD', lessons: 12 },
-  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#1D9E75', lessons: 18 },
-  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#BA7517', lessons: 14 },
-  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, React, full-stack projects',  color:'#185FA5', lessons: 20 },
-  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#993C1D', lessons: 18 },
-  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#3B6D11', lessons: 10 },
+  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7F77DD' },
+  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#1D9E75' },
+  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#BA7517' },
+  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, system design, architecture', color:'#185FA5' },
+  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#993C1D' },
+  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#3B6D11' },
 ];
 ---
 <Base title="Learn — qubitstoai">
@@ -28,14 +28,8 @@ const tracks = [
             {i + 1}
           </div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-3 mb-1">
-              <span class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors">{track.title}</span>
-              
-            </div>
-            <p class="text-sm text-zinc-500 leading-relaxed">{track.desc}</p>
-          </div>
-          <div class="text-right shrink-0 hidden md:block">
-            <div class="text-xs font-mono text-zinc-600">{track.lessons} lessons</div>
+            <span class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors">{track.title}</span>
+            <p class="text-sm text-zinc-500 leading-relaxed mt-1">{track.desc}</p>
           </div>
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors">

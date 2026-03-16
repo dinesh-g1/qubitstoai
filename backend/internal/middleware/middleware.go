@@ -4,13 +4,15 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/qubitstoai/backend/internal/auth"
 	"golang.org/x/time/rate"
 )
 
-// Chain applies middleware in order (first = outermost)
 func Chain(h http.Handler, middlewares ...func(http.Handler) http.Handler) http.Handler {
 	for i := len(middlewares) - 1; i >= 0; i-- {
 		h = middlewares[i](h)
@@ -18,7 +20,6 @@ func Chain(h http.Handler, middlewares ...func(http.Handler) http.Handler) http.
 	return h
 }
 
-// Logger logs method, path, status, and duration
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -38,7 +39,6 @@ func (rw *responseWriter) WriteHeader(status int) {
 	rw.ResponseWriter.WriteHeader(status)
 }
 
-// CORS allows requests from the frontend origin
 func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -52,7 +52,6 @@ func CORS(next http.Handler) http.Handler {
 	})
 }
 
-// RateLimit applies per-IP rate limiting: 20 req/s, burst 40
 var (
 	mu       sync.Mutex
 	limiters = map[string]*rate.Limiter{}
@@ -78,4 +77,31 @@ func RateLimit(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
+}
+
+// RequireAdmin extracts and validates the JWT from the Authorization header.
+// Attaches admin_id to request context via a simple header forward.
+func RequireAdmin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" {
+			http.Error(w, `{"error":"unauthorized"}`, http.StatusUnauthorized)
+			return
+		}
+		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
+		claims, err := auth.ValidateToken(tokenStr)
+		if err != nil {
+			http.Error(w, `{"error":"invalid token"}`, http.StatusUnauthorized)
+			return
+		}
+		// Forward admin info as headers for handlers to read
+		r.Header.Set("X-Admin-ID", strconv.Itoa(claims.AdminID))
+		r.Header.Set("X-Admin-Email", claims.Email)
+		next.ServeHTTP(w, r)
+	})
+}
+
+// adminMux wraps a mux so RequireAdmin is applied to all routes registered on it
+func AdminOnly(h http.Handler) http.Handler {
+	return RequireAdmin(h)
 }

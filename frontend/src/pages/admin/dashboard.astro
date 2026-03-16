@@ -1,0 +1,186 @@
+export const prerender = false;
+---
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard — qubitstoai admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <script is:inline>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark')}catch(e){}</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--font-body:'Plus Jakarta Sans',system-ui,sans-serif;--font-display:'Fraunces',Georgia,serif;--font-mono:'JetBrains Mono',monospace}
+    [data-theme="dark"]{--bg:#0f1117;--bg-subtle:#161b27;--bg-hover:#1d2233;--border:#2a3045;--border-light:#1e2436;--text-primary:#e8eaf0;--text-secondary:#9ba3b8;--text-muted:#5c6480;--accent:#7c6ff7;--accent-hover:#9b91f9;--accent-dim:#2d2860;--accent-border:#4a44a0;--green:#22c55e;--red:#f87171}
+    [data-theme="light"]{--bg:#f7f6f3;--bg-subtle:#ffffff;--bg-hover:#eeede8;--border:#dddbd4;--border-light:#e8e6e0;--text-primary:#1a1a2e;--text-secondary:#4a4a6a;--text-muted:#8a8a9a;--accent:#4338ca;--accent-hover:#3730a3;--accent-dim:#eef2ff;--accent-border:#a5b4fc;--green:#16a34a;--red:#dc2626}
+    body{font-family:var(--font-body);font-size:1rem;background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+
+    /* Sidebar layout */
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:220px;flex-shrink:0;background:var(--bg-subtle);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:0.35rem;position:fixed;top:0;bottom:0;overflow-y:auto}
+    .sidebar-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:700;padding:0 0.5rem;margin-bottom:1.5rem}
+    .sidebar-logo span{color:var(--accent)}
+    .nav-item{display:flex;align-items:center;gap:0.6rem;padding:0.6rem 0.75rem;border-radius:8px;font-size:0.9rem;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:background 0.15s,color 0.15s}
+    .nav-item:hover,.nav-item.active{background:var(--bg-hover);color:var(--text-primary)}
+    .nav-item.active{color:var(--accent)}
+    .sidebar-sep{height:1px;background:var(--border);margin:0.75rem 0}
+    .sidebar-bottom{margin-top:auto}
+    .logout-btn{width:100%;padding:0.6rem 0.75rem;background:none;border:none;border-radius:8px;font-family:var(--font-body);font-size:0.9rem;font-weight:500;color:var(--red);cursor:pointer;text-align:left;display:flex;align-items:center;gap:0.6rem}
+    .logout-btn:hover{background:var(--bg-hover)}
+
+    /* Main content */
+    .main{margin-left:220px;flex:1;padding:2.5rem;max-width:900px}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+    h1{font-family:var(--font-display);font-size:1.75rem;font-weight:700}
+    .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:var(--font-body);font-size:0.875rem;font-weight:600;cursor:pointer;transition:background 0.15s;text-decoration:none}
+    .btn-primary:hover{background:var(--accent-hover)}
+
+    /* Posts table */
+    .table-wrap{background:var(--bg-subtle);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead{background:var(--bg-hover)}
+    th{padding:0.9rem 1.1rem;text-align:left;font-size:0.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:500}
+    td{padding:0.9rem 1.1rem;font-size:0.9rem;color:var(--text-secondary);border-top:1px solid var(--border-light)}
+    .post-title{font-weight:600;color:var(--text-primary);font-size:0.9375rem}
+    .post-section{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)}
+    .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:0.72rem;font-weight:600;font-family:var(--font-mono)}
+    .badge-published{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+    .badge-draft{background:var(--bg-hover);color:var(--text-muted)}
+    .actions{display:flex;align-items:center;gap:0.5rem}
+    .action-btn{padding:5px 12px;border-radius:7px;font-size:0.78rem;font-weight:600;font-family:var(--font-body);cursor:pointer;border:1px solid var(--border);background:none;color:var(--text-secondary);transition:all 0.15s}
+    .action-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+    .action-btn.publish:hover{border-color:var(--green);color:var(--green)}
+    .empty{padding:3rem;text-align:center;color:var(--text-muted);font-size:0.9rem}
+    .loading{padding:3rem;text-align:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">qubits<span>to</span>ai</div>
+    <a href="/admin/dashboard" class="nav-item active">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/posts/new" class="nav-item">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/></svg>
+      New post
+    </a>
+    <div class="sidebar-sep"></div>
+    <a href="/" class="nav-item" target="_blank">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      View site
+    </a>
+    <div class="sidebar-bottom">
+      <div class="sidebar-sep"></div>
+      <div id="user-name" style="padding:0.5rem 0.75rem;font-size:0.8rem;color:var(--text-muted)"></div>
+      <button class="logout-btn" id="logout-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1"/></svg>
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="page-header">
+      <h1>All posts</h1>
+      <a href="/admin/posts/new" class="btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/></svg>
+        New post
+      </a>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="loading">Loading posts...</div>
+      <table id="posts-table" style="display:none">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Section</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="posts-body"></tbody>
+      </table>
+      <div class="empty" id="empty" style="display:none">No posts yet. <a href="/admin/posts/new" style="color:var(--accent)">Write your first one →</a></div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem('admin_token');
+  if (!token) window.location.href = '/admin/login';
+
+  const user = JSON.parse(localStorage.getItem('admin_user') || '{}');
+  document.getElementById('user-name').textContent = user.email || '';
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    window.location.href = '/admin/login';
+  });
+
+  async function loadPosts() {
+    const res = await fetch('/api/v1/admin/posts', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.status === 401) { window.location.href = '/admin/login'; return; }
+    const posts = await res.json();
+
+    document.getElementById('loading').style.display = 'none';
+    if (!posts.length) {
+      document.getElementById('empty').style.display = 'block';
+      return;
+    }
+    document.getElementById('posts-table').style.display = 'table';
+    const tbody = document.getElementById('posts-body');
+    tbody.innerHTML = posts.map(p => `
+      <tr>
+        <td>
+          <div class="post-title">${p.title}</div>
+          <div class="post-section">${p.tag}</div>
+        </td>
+        <td><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text-muted)">${p.section_slug || '—'}</span></td>
+        <td><span class="badge ${p.published ? 'badge-published' : 'badge-draft'}">${p.published ? 'Published' : 'Draft'}</span></td>
+        <td style="font-size:0.8rem;font-family:var(--font-mono)">${new Date(p.updated_at).toLocaleDateString()}</td>
+        <td>
+          <div class="actions">
+            <a href="/admin/posts/${p.id}/edit" class="action-btn">Edit</a>
+            <button class="action-btn publish" onclick="togglePublish(${p.id}, ${p.published})">${p.published ? 'Unpublish' : 'Publish'}</button>
+            <button class="action-btn danger" onclick="deletePost(${p.id})">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function togglePublish(id, isPublished) {
+    const action = isPublished ? 'unpublish' : 'publish';
+    await fetch(`/api/v1/admin/posts/${id}/${action}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    loadPosts();
+  }
+
+  async function deletePost(id) {
+    if (!confirm('Delete this post? This cannot be undone.')) return;
+    await fetch(`/api/v1/admin/posts/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    loadPosts();
+  }
+
+  loadPosts();
+</script>
+</body>
+</html>

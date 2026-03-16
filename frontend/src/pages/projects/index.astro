@@ -1,34 +1,33 @@
 ---
 import Base from '../../layouts/Base.astro';
 const projects = [
-  { title:'NAND simulator',   desc:'Boolean logic gate simulator built from scratch in Go. Simulate any circuit from NAND primitives.',       tag:'Hardware', color:'#7C3AED', status:'In progress', github:'https://github.com/qubitstoai/nand-simulator' },
-  { title:'Mini CPU',         desc:'A 16-bit CPU built on breadboard. Runs a small custom instruction set.',                                   tag:'Hardware', color:'#7C3AED', status:'Planned',     github:'#' },
-  { title:'qsh — tiny shell', desc:'A POSIX-compatible shell written in C. Supports pipes, redirects, job control, and builtins.',             tag:'Systems',  color:'#059669', status:'Planned',     github:'#' },
-  { title:'tinycompiler',     desc:'A compiler from a simple language to x86 assembly. Lexer → parser → AST → codegen.',                     tag:'Compilers',color:'#D97706', status:'Planned',     github:'#' },
-  { title:'qubitstoai.com',   desc:'This website. Go backend, Astro frontend, PostgreSQL, self-hosted on a VPS. All open source.',            tag:'Web',      color:'#2563EB', status:'Live',        github:'https://github.com/qubitstoai/site' },
+  { title:'NAND simulator',   desc:'Boolean logic gate simulator in Go. Simulate any circuit from NAND primitives.',     tag:'Hardware', color:'var(--c-hardware)', status:'In progress', github:'https://github.com/qubitstoai/nand-simulator' },
+  { title:'Mini CPU',         desc:'A 16-bit CPU built on breadboard. Custom instruction set.',                           tag:'Hardware', color:'var(--c-hardware)', status:'Planned',     github:'#' },
+  { title:'qsh — tiny shell', desc:'POSIX-compatible shell in C. Pipes, redirects, job control, builtins.',              tag:'Systems',  color:'var(--c-systems)',  status:'Planned',     github:'#' },
+  { title:'tinycompiler',     desc:'Compiler from simple language to x86 assembly. Lexer → parser → AST → codegen.',    tag:'Compilers',color:'var(--c-compilers)',status:'Planned',     github:'#' },
+  { title:'qubitstoai.com',   desc:'This website. Go + Astro + PostgreSQL, self-hosted on a VPS. All open source.',     tag:'Web',      color:'var(--c-web)',      status:'Live',        github:'https://github.com/qubitstoai/site' },
 ];
 ---
 <Base title="Projects — qubitstoai">
-  <div style="max-width:56rem;margin:0 auto;padding:4rem 1.75rem 6rem;">
-    <div style="margin-bottom:3rem;">
-      <div class="label" style="margin-bottom:0.6rem;">Open source</div>
-      <h1 style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.75rem;">Projects</h1>
-      <p style="color:var(--ink-3);font-size:var(--text-base);">Every concept gets built. All repos are public on GitHub.</p>
+  <div style="max-width:56rem;margin:0 auto;padding:3.5rem 1.5rem 6rem;">
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--foreground-4);margin-bottom:0.5rem;">Open source</div>
+      <h1 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;color:var(--foreground);margin-bottom:0.4rem;">Projects</h1>
+      <p style="font-size:0.875rem;color:var(--foreground-3);">Every concept gets built. All repos are public on GitHub.</p>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
+    <div style="height:1px;background:var(--border);margin-bottom:1.5rem;"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.75rem;">
       {projects.map(p => (
-        <a href={p.github} target="_blank" rel="noopener noreferrer" style="display:block;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2C0BA';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.07)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';this.style.transform='none'">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-            <span style={`font-family:var(--font-mono);font-size:0.7rem;padding:3px 10px;border-radius:999px;background:${p.color}10;color:${p.color};border:1px solid ${p.color}20`}>{p.tag}</span>
-            <span style={`font-family:var(--font-mono);font-size:0.7rem;color:${p.status==='Live'?'#16A34A':p.status==='In progress'?'#D97706':'var(--ink-4)'}`}>
-              {p.status==='Live'?'● ':p.status==='In progress'?'◐ ':'○ '}{p.status}
-            </span>
+        <a href={p.github} target="_blank" rel="noopener noreferrer" style="display:block;padding:1.25rem;background:var(--background-1);border:1px solid var(--border);border-radius:var(--radius-lg);text-decoration:none;transition:background 0.1s,border-color 0.1s;" onmouseover="this.style.background='var(--background-2)';this.style.borderColor='var(--background-3)'" onmouseout="this.style.background='var(--background-1)';this.style.borderColor='var(--border)'">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;">
+            <span style={`font-family:var(--font-mono);font-size:0.65rem;padding:2px 8px;border-radius:var(--radius-sm);background:color-mix(in srgb,${p.color} 12%,var(--background-2));color:${p.color}`}>{p.tag}</span>
+            <span style={`font-family:var(--font-mono);font-size:0.65rem;color:${p.status==='Live'?'var(--success)':p.status==='In progress'?'var(--warning)':'var(--foreground-4)'}`}>{p.status==='Live'?'● ':p.status==='In progress'?'◐ ':'○ '}{p.status}</span>
           </div>
-          <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:0.5rem;">{p.title}</div>
-          <div style="font-size:var(--text-sm);color:var(--ink-3);line-height:1.6;margin-bottom:1.25rem;">{p.desc}</div>
-          <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.7rem;color:var(--ink-4);">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            View on GitHub
+          <div style="font-size:0.9375rem;font-weight:500;color:var(--foreground);margin-bottom:0.4rem;">{p.title}</div>
+          <div style="font-size:0.8rem;color:var(--foreground-3);line-height:1.5;margin-bottom:1rem;">{p.desc}</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:0.65rem;color:var(--foreground-4);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
           </div>
         </a>
       ))}

@@ -1,455 +1,193 @@
 ---
+import Base from '../layouts/Base.astro';
+
 const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+
 const tracks = [
-  { slug:'hardware',  title:'Hardware',          sub:'NAND gates → CPU',        color:'var(--tag-hardware)', months:'Months 1–3'  },
-  { slug:'systems',   title:'Systems',            sub:'Assembly → OS internals', color:'var(--tag-systems)',  months:'Months 4–8'  },
-  { slug:'compilers', title:'Compilers & VMs',    sub:'Lexers → bytecode',       color:'var(--tag-compilers)',months:'Months 9–13' },
-  { slug:'web',       title:'Web & Backend',      sub:'HTTP → full-stack apps',  color:'var(--tag-web)',      months:'Months 14–20'},
-  { slug:'ml',        title:'ML & Deep Learning', sub:'Math → transformers',     color:'var(--tag-ml)',       months:'Months 21–26'},
-  { slug:'agents',    title:'AI Agents',          sub:'Planning → autonomy',     color:'var(--tag-agents)',   months:'Months 27–30'},
+  { slug:'hardware',  title:'Hardware',          sub:'NAND gates → CPU',        color:'#7F77DD', icon:'⬡' },
+  { slug:'systems',   title:'Systems',            sub:'Assembly → OS internals', color:'#1D9E75', icon:'⬡' },
+  { slug:'compilers', title:'Compilers & VMs',    sub:'Lexers → bytecode',       color:'#BA7517', icon:'⬡' },
+  { slug:'web',       title:'Web & Backend',      sub:'HTTP → full-stack apps',  color:'#185FA5', icon:'⬡' },
+  { slug:'ml',        title:'ML & Deep Learning', sub:'Math → transformers',     color:'#993C1D', icon:'⬡' },
+  { slug:'agents',    title:'AI Agents',          sub:'Planning → autonomy',     color:'#3B6D11', icon:'⬡' },
 ];
-let posts: any[] = [];
+
+let posts = [];
 try {
   const res = await fetch(`${API}/api/v1/posts`);
   if (res.ok) posts = await res.json();
 } catch {}
 ---
-<!doctype html>
-<html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qubitstoai — From NAND gates to AI agents</title>
-  <meta name="description" content="Deep, structured computer science from logic gates to autonomous AI agents." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <script is:inline>
-    try { document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark'); } catch(e) {}
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+<Base>
+  <!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+  <section class="relative min-h-[92vh] flex flex-col justify-center px-6 overflow-hidden">
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-      --font-display: 'Fraunces', Georgia, serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
-    [data-theme="dark"] {
-      --bg: #0f1117; --bg-subtle: #161b27; --bg-hover: #1d2233;
-      --border: #2a3045; --border-light: #1e2436;
-      --text-primary: #e8eaf0; --text-secondary: #9ba3b8; --text-muted: #5c6480;
-      --accent: #7c6ff7; --accent-hover: #9b91f9; --accent-dim: #2d2860; --accent-border: #4a44a0;
-      --tag-hardware: #6366f1; --tag-systems: #14b8a6; --tag-compilers: #f59e0b;
-      --tag-web: #3b82f6; --tag-ml: #f97316; --tag-agents: #22c55e;
-    }
-    [data-theme="light"] {
-      --bg: #f7f6f3; --bg-subtle: #ffffff; --bg-hover: #eeede8;
-      --border: #dddbd4; --border-light: #e8e6e0;
-      --text-primary: #1a1a2e; --text-secondary: #4a4a6a; --text-muted: #8a8a9a;
-      --accent: #4338ca; --accent-hover: #3730a3; --accent-dim: #eef2ff; --accent-border: #a5b4fc;
-      --tag-hardware: #4f46e5; --tag-systems: #0d9488; --tag-compilers: #d97706;
-      --tag-web: #2563eb; --tag-ml: #ea580c; --tag-agents: #16a34a;
-    }
-
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-body); font-size: 1.0625rem;
-      line-height: 1.7; background: var(--bg); color: var(--text-primary);
-      -webkit-font-smoothing: antialiased;
-      transition: background 0.2s, color 0.2s;
-    }
-    a { color: inherit; text-decoration: none; }
-
-    /* NAV */
-    #nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 60px;
-      border-bottom: 1px solid var(--border-light);
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .nav-inner {
-      max-width: 72rem; margin: 0 auto; padding: 0 1.75rem;
-      height: 100%; display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
-    .nav-logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 2.25rem; }
-    .nav-links a { font-size: 0.9375rem; font-weight: 500; color: var(--text-secondary); transition: color 0.15s; }
-    .nav-links a:hover { color: var(--text-primary); }
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
-    .nav-subscribe {
-      font-size: 0.8rem; font-weight: 600; padding: 7px 18px; border-radius: 999px;
-      border: 1.5px solid var(--accent-border); color: var(--accent);
-      transition: background 0.15s;
-    }
-    .nav-subscribe:hover { background: var(--accent-dim); }
-    .theme-toggle { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; padding: 4px; }
-    .toggle-track {
-      width: 44px; height: 24px; background: var(--border); border-radius: 999px;
-      position: relative; transition: background 0.25s; border: 1.5px solid var(--border);
-    }
-    [data-theme="light"] .toggle-track { background: var(--accent); border-color: var(--accent); }
-    .toggle-thumb {
-      width: 18px; height: 18px; background: var(--bg-subtle); border-radius: 50%;
-      position: absolute; top: 1px; left: 1px;
-      transition: transform 0.25s cubic-bezier(.4,0,.2,1);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-    }
-    [data-theme="light"] .toggle-thumb { transform: translateX(20px); }
-    .toggle-icon { color: var(--text-muted); display: flex; align-items: center; }
-    [data-theme="dark"]  .icon-moon { color: var(--accent); }
-    [data-theme="light"] .icon-sun  { color: var(--accent); }
-
-    /* HERO */
-    .hero {
-      min-height: 92vh; display: flex; flex-direction: column; justify-content: center;
-      padding: 0 1.75rem; max-width: 72rem; margin: 0 auto; position: relative;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--font-mono); font-size: 0.78rem;
-      color: var(--accent); border: 1px solid var(--accent-border);
-      background: var(--accent-dim); border-radius: 999px;
-      padding: 5px 14px; margin-bottom: 2rem;
-    }
-    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .hero h1 {
-      font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5rem);
-      font-weight: 700; line-height: 1.05; letter-spacing: -0.02em;
-      color: var(--text-primary); margin-bottom: 1.5rem;
-    }
-    .hero h1 em { font-style: italic; color: var(--accent); }
-    .hero-sub {
-      font-size: 1.1875rem; color: var(--text-secondary);
-      line-height: 1.7; max-width: 36rem; margin-bottom: 2.5rem;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; background: var(--accent); color: #fff;
-      border-radius: 10px; font-weight: 600; font-size: 0.9375rem;
-      transition: background 0.15s, transform 0.1s;
-    }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-    .btn-ghost {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border: 1.5px solid var(--border);
-      color: var(--text-secondary); border-radius: 10px;
-      font-weight: 600; font-size: 0.9375rem;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .btn-ghost:hover { border-color: var(--text-muted); color: var(--text-primary); }
-    .hero-stats {
-      display: flex; flex-wrap: wrap; gap: 2.5rem;
-      margin-top: 4rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
-    }
-    .stat-num { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--text-primary); }
-    .stat-num.accent { color: var(--accent); }
-    .stat-label { font-size: 0.875rem; color: var(--text-muted); margin-left: 8px; }
-
-    /* GRID BG */
-    .grid-bg {
-      position: absolute; inset: 0; pointer-events: none; opacity: 0.03;
-      background-image: linear-gradient(var(--accent) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--accent) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-    .glow {
-      position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 300px; border-radius: 50%; pointer-events: none;
-      background: radial-gradient(ellipse, var(--accent) 0%, transparent 70%);
-      opacity: 0.06; filter: blur(60px);
-    }
-
-    /* SECTION */
-    .section { max-width: 72rem; margin: 0 auto; padding: 6rem 1.75rem; }
-    .section-label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); margin-bottom: 0.75rem; }
-    .section-title { font-family: var(--font-display); font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; }
-    .section-sub { font-size: 1rem; color: var(--text-secondary); max-width: 36rem; line-height: 1.7; }
-
-    /* TRACK CARDS */
-    .tracks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 3rem; }
-    .track-card {
-      padding: 1.5rem; border-radius: 14px;
-      border: 1px solid var(--border); background: var(--bg-subtle);
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-    .track-card:hover { border-color: var(--accent-border); background: var(--bg-hover); transform: translateY(-2px); }
-    .track-num {
-      width: 40px; height: 40px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-    .track-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem; transition: color 0.15s; }
-    .track-card:hover .track-title { color: var(--accent); }
-    .track-sub { font-size: 0.875rem; color: var(--text-muted); }
-    .track-months { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 1rem; }
-
-    /* POSTS LIST */
-    .posts-list { margin-top: 2.5rem; }
-    .post-row {
-      display: flex; align-items: flex-start; gap: 1.5rem;
-      padding: 1.5rem 1rem; border-bottom: 1px solid var(--border-light);
-      border-radius: 10px; transition: background 0.15s;
-      cursor: pointer;
-    }
-    .post-row:hover { background: var(--bg-hover); }
-    .post-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; width: 24px; flex-shrink: 0; }
-    .post-tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); margin-bottom: 0.35rem; }
-    .post-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--text-primary); line-height: 1.35; transition: color 0.15s; }
-    .post-row:hover .post-title { color: var(--accent); }
-    .post-meta { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.35rem; }
-    .empty-box {
-      border: 1px dashed var(--border); border-radius: 14px;
-      padding: 4rem; text-align: center; margin-top: 2rem;
-    }
-    .empty-box p { color: var(--text-secondary); font-size: 0.9375rem; }
-    .empty-box .mono { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
-
-    /* NEWSLETTER */
-    .newsletter { border-top: 1px solid var(--border); padding: 6rem 1.75rem; text-align: center; }
-    .newsletter-inner { max-width: 36rem; margin: 0 auto; }
-    .nl-form { display: flex; gap: 0.75rem; margin-top: 2rem; max-width: 28rem; margin-left: auto; margin-right: auto; }
-    .nl-input {
-      flex: 1; padding: 12px 16px; background: var(--bg-subtle);
-      border: 1.5px solid var(--border); border-radius: 10px;
-      font-family: var(--font-body); font-size: 0.9375rem;
-      color: var(--text-primary); outline: none;
-      transition: border-color 0.15s;
-    }
-    .nl-input:focus { border-color: var(--accent); }
-    .nl-input::placeholder { color: var(--text-muted); }
-    .nl-btn {
-      padding: 12px 24px; background: var(--accent); color: #fff;
-      border: none; border-radius: 10px; cursor: pointer;
-      font-family: var(--font-body); font-size: 0.9375rem; font-weight: 600;
-      transition: background 0.15s; white-space: nowrap;
-    }
-    .nl-btn:hover { background: var(--accent-hover); }
-
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); background: var(--bg-subtle); margin-top: 0; }
-    .footer-grid { max-width: 72rem; margin: 0 auto; padding: 3.5rem 1.75rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
-    .footer-logo { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; }
-    .footer-logo span { color: var(--accent); }
-    .footer-desc { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.8; max-width: 22rem; }
-    .footer-heading { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 1.1rem; }
-    .footer-links { display: flex; flex-direction: column; gap: 0.6rem; }
-    .footer-links a { font-size: 0.9375rem; font-weight: 500; color: var(--text-secondary); transition: color 0.15s; }
-    .footer-links a:hover { color: var(--accent); }
-    .footer-bottom { border-top: 1px solid var(--border); }
-    .footer-bottom-inner { max-width: 72rem; margin: 0 auto; padding: 1rem 1.75rem; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
-
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-subscribe { display: none; }
-      .tracks-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .nl-form { flex-direction: column; }
-    }
-    @media (min-width: 769px) { #menu-btn { display: none; } }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">qubits<span>to</span>ai</a>
-    <div class="nav-links">
-      <a href="/learn">Learn</a>
-      <a href="/blog">Blog</a>
-      <a href="/projects">Projects</a>
-      <a href="/about">About</a>
+    <!-- Background grid -->
+    <div class="absolute inset-0 opacity-[0.04]"
+         style="background-image: linear-gradient(#7F77DD 1px, transparent 1px), linear-gradient(90deg, #7F77DD 1px, transparent 1px); background-size: 60px 60px;">
     </div>
-    <div class="nav-right">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <span class="toggle-icon icon-moon">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-        </span>
-        <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon icon-sun">
-          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>
-        </span>
-      </button>
-      <a href="#newsletter" class="nav-subscribe">Subscribe</a>
-      <button id="menu-btn" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text-secondary);">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
+
+    <!-- Glow orb -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-10"
+         style="background: radial-gradient(ellipse, #7F77DD 0%, transparent 70%); filter: blur(60px);">
     </div>
-  </div>
-</nav>
-<div id="mobile-menu" style="display:none;border-top:1px solid var(--border);background:var(--bg);">
-  <div style="max-width:72rem;margin:0 auto;padding:1.25rem 1.75rem;display:flex;flex-direction:column;gap:1rem;">
-    <a href="/learn" style="font-size:1rem;font-weight:500;color:var(--text-secondary);">Learn</a>
-    <a href="/blog" style="font-size:1rem;font-weight:500;color:var(--text-secondary);">Blog</a>
-    <a href="/projects" style="font-size:1rem;font-weight:500;color:var(--text-secondary);">Projects</a>
-    <a href="/about" style="font-size:1rem;font-weight:500;color:var(--text-secondary);">About</a>
-  </div>
-</div>
 
-<main style="padding-top:60px;">
-
-  <!-- HERO -->
-  <section style="position:relative;overflow:hidden;">
-    <div class="grid-bg"></div>
-    <div class="glow"></div>
-    <div class="hero">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        Building in public · 30-month curriculum
+    <div class="relative max-w-6xl mx-auto w-full">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 text-xs text-brand-400 border border-brand-400/30 rounded-full px-3 py-1 mb-8 font-mono">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+        Building in public · learning out of curiosity
       </div>
-      <h1>Computer<br/>science,<br/><em>ground up.</em></h1>
-      <p class="hero-sub">From a single NAND gate to autonomous AI agents. Every layer explained, every concept built from scratch.</p>
-      <div style="display:flex;flex-wrap:wrap;gap:1rem;">
-        <a href="/learn" class="btn-primary">
+
+      <!-- Headline -->
+      <h1 class="font-display text-5xl md:text-7xl font-800 leading-[0.95] tracking-tight mb-6 max-w-3xl">
+        Computer<br/>
+        science<br/>
+        <span class="text-brand-400">ground up.</span>
+      </h1>
+
+      <p class="text-zinc-400 text-lg md:text-xl leading-relaxed max-w-xl mb-10">
+        From a single NAND gate to autonomous AI agents. Every layer explained, every concept built from scratch.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="/learn" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-400 hover:bg-brand-600 text-white rounded-lg font-500 text-sm transition-colors">
           Start learning
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
         </a>
-        <a href="/blog" class="btn-ghost">Read the blog</a>
+        <a href="/blog" class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 rounded-lg font-500 text-sm transition-colors">
+          Read the blog
+        </a>
       </div>
-      <div class="hero-stats">
-        <div><span class="stat-num">6</span><span class="stat-label">tracks</span></div>
-        <div><span class="stat-num">120+</span><span class="stat-label">planned lessons</span></div>
-        <div><span class="stat-num">30</span><span class="stat-label">months of content</span></div>
-        <div><span class="stat-num accent">Free</span><span class="stat-label">forever</span></div>
+
+      <!-- Stats row -->
+      <div class="flex flex-wrap gap-8 mt-16 pt-8 border-t border-zinc-800/60 text-sm">
+        <div><span class="text-2xl font-display font-700 text-zinc-100">6</span><span class="text-zinc-500 ml-2">tracks</span></div>
+        <div><span class="text-2xl font-display font-700 text-zinc-100">120+</span><span class="text-zinc-500 ml-2">planned lessons</span></div>
+        
+        <div><span class="text-2xl font-display font-700 text-brand-400">Free</span><span class="text-zinc-500 ml-2">forever</span></div>
       </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-600 text-xs animate-bounce">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
     </div>
   </section>
 
-  <!-- TRACKS -->
-  <section class="section" style="border-top:1px solid var(--border-light);">
-    <div class="section-label">Curriculum</div>
-    <h2 class="section-title">Learn the whole stack</h2>
-    <p class="section-sub">Six tracks, each building on the last. Start at hardware, finish at autonomous AI.</p>
-    <div class="tracks-grid">
+  <!-- ── TRACKS ─────────────────────────────────────────────────────────── -->
+  <section class="px-6 py-24 max-w-6xl mx-auto">
+    <div class="mb-12">
+      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">Exploring</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 tracking-tight">Topics I'm diving into</h2>
+      <p class="text-zinc-400 mt-3 text-base max-w-lg">From hardware to AI — explored in whatever order curiosity takes me.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {tracks.map((track, i) => (
-        <a href={`/learn/${track.slug}`} class="track-card">
-          <div class="track-num" style={`background:color-mix(in srgb,${track.color} 15%,var(--bg));color:${track.color};border:1px solid color-mix(in srgb,${track.color} 30%,transparent)`}>
-            {i + 1}
+        <a href={`/learn/${track.slug}`}
+           class="group relative p-6 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/40 hover:bg-zinc-900/80 transition-all duration-200">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+                 style={`background: ${track.color}20; border: 1px solid ${track.color}40`}>
+              <span style={`color: ${track.color}`}>{i + 1}</span>
+            </div>
+            
           </div>
-          <div class="track-title">{track.title}</div>
-          <div class="track-sub">{track.sub}</div>
-          <div class="track-months">{track.months}</div>
+          <h3 class="font-display font-600 text-zinc-100 mb-1 group-hover:text-brand-400 transition-colors">{track.title}</h3>
+          <p class="text-sm text-zinc-500">{track.sub}</p>
+          <div class="mt-4 flex items-center gap-1 text-xs text-zinc-600 group-hover:text-zinc-400 transition-colors">
+            <span>View track</span>
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </div>
         </a>
       ))}
     </div>
   </section>
 
-  <!-- POSTS -->
-  <section class="section" style="padding-top:0;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:0.5rem;">
+  <!-- ── LATEST POSTS ───────────────────────────────────────────────────── -->
+  <section class="px-6 pb-24 max-w-6xl mx-auto">
+    <div class="flex items-end justify-between mb-10">
       <div>
-        <div class="section-label">Latest</div>
-        <h2 class="section-title">Recent articles</h2>
+        <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">Latest</div>
+        <h2 class="font-display text-3xl md:text-4xl font-700 tracking-tight">Recent articles</h2>
       </div>
-      <a href="/blog" style="font-size:0.9rem;color:var(--accent);font-weight:500;">All articles →</a>
+      <a href="/blog" class="text-sm text-brand-400 hover:text-brand-200 transition-colors hidden md:block">All articles →</a>
     </div>
+
     {posts.length > 0 ? (
-      <div class="posts-list">
+      <div class="divide-y divide-zinc-800">
         {posts.slice(0,5).map((post: any, i: number) => (
-          <a href={`/blog/${post.slug}`} class="post-row" style="display:flex;">
-            <span class="post-num">{String(i+1).padStart(2,'0')}</span>
-            <div style="flex:1;">
-              <div class="post-tag">{post.tag}</div>
-              <div class="post-title">{post.title}</div>
-              <div class="post-meta">{post.read_mins} min read</div>
+          <a href={`/blog/${post.slug}`}
+             class="group flex items-start gap-6 py-6 hover:bg-zinc-900/30 -mx-4 px-4 rounded-lg transition-colors">
+            <span class="font-mono text-xs text-zinc-700 mt-1 w-6 shrink-0">{String(i+1).padStart(2,'0')}</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-mono text-brand-400/80 mb-1">{post.tag}</div>
+              <div class="font-500 text-zinc-100 group-hover:text-brand-400 transition-colors leading-snug">{post.title}</div>
+              <div class="text-sm text-zinc-500 mt-1">{post.read_mins} min read</div>
             </div>
-            <svg width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="1.5" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                 class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors mt-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
           </a>
         ))}
       </div>
     ) : (
-      <div class="empty-box">
-        <div class="mono">// coming soon</div>
-        <p>First articles dropping soon. Subscribe to be notified.</p>
+      <div class="border border-zinc-800 rounded-xl p-12 text-center">
+        <div class="text-zinc-600 text-sm font-mono mb-2">// coming soon</div>
+        <p class="text-zinc-500 text-sm">First articles dropping soon. Subscribe to be notified.</p>
       </div>
     )}
   </section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter" id="newsletter">
-    <div class="newsletter-inner">
-      <div class="section-label" style="text-align:center;">Newsletter</div>
-      <h2 class="section-title" style="text-align:center;">Follow the build</h2>
-      <p style="color:var(--text-secondary);font-size:1rem;line-height:1.7;margin-top:0.75rem;">
+  <!-- ── NEWSLETTER ─────────────────────────────────────────────────────── -->
+  <section id="newsletter" class="px-6 py-24 border-t border-zinc-800">
+    <div class="max-w-2xl mx-auto text-center">
+      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-4">Newsletter</div>
+      <h2 class="font-display text-3xl md:text-4xl font-700 tracking-tight mb-4">Follow the build</h2>
+      <p class="text-zinc-400 text-base leading-relaxed mb-8">
         Weekly dispatch: what I learned, what I built, what broke. No spam. Unsubscribe anytime.
       </p>
-      <form id="nl-form" class="nl-form">
-        <input type="email" id="nl-email" placeholder="you@email.com" required class="nl-input" />
-        <button type="submit" class="nl-btn">Subscribe →</button>
+      <form id="nl-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input type="email" id="nl-email" placeholder="you@email.com" required
+               class="flex-1 px-4 py-2.5 bg-zinc-900 border border-zinc-700 focus:border-brand-400 rounded-lg text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-colors" />
+        <button type="submit"
+                class="px-6 py-2.5 bg-brand-400 hover:bg-brand-600 text-white rounded-lg text-sm font-500 transition-colors whitespace-nowrap">
+          Subscribe →
+        </button>
       </form>
-      <p id="nl-msg" style="margin-top:0.75rem;font-size:0.875rem;color:var(--text-muted);display:none;"></p>
+      <p id="nl-msg" class="mt-3 text-sm text-zinc-500 hidden"></p>
     </div>
   </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-logo">qubits<span>to</span>ai</div>
-      <p class="footer-desc">Computer science from the ground up. No shortcuts — deep understanding built layer by layer.</p>
-    </div>
-    <div>
-      <div class="footer-heading">Learn</div>
-      <div class="footer-links">
-        {['hardware','systems','compilers','web','ml','agents'].map(t => (
-          <a href={`/learn/${t}`}>{t.charAt(0).toUpperCase()+t.slice(1)}</a>
-        ))}
-      </div>
-    </div>
-    <div>
-      <div class="footer-heading">Connect</div>
-      <div class="footer-links">
-        <a href="https://github.com/qubitstoai">GitHub</a>
-        <a href="https://youtube.com/@qubitstoai">YouTube</a>
-        <a href="https://x.com/qubitstoai">X / Twitter</a>
-        <a href="/rss.xml">RSS</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-bottom-inner">
-      <span>© 2025 qubitstoai.com · Built in public</span>
-      <span>From NAND gates to AI agents</span>
-    </div>
-  </div>
-</footer>
+</Base>
 
 <script>
-  document.getElementById('theme-toggle')?.addEventListener('click', () => {
-    const html = document.documentElement;
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    try { localStorage.setItem('theme', next); } catch(e) {}
-  });
-  document.getElementById('menu-btn')?.addEventListener('click', () => {
-    const m = document.getElementById('mobile-menu');
-    if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
-  });
   const form = document.getElementById('nl-form') as HTMLFormElement;
-  const msg = document.getElementById('nl-msg') as HTMLElement;
+  const msg  = document.getElementById('nl-msg') as HTMLElement;
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = (document.getElementById('nl-email') as HTMLInputElement).value;
     try {
-      const res = await fetch('/api/v1/newsletter/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email}) });
-      msg.textContent = res.ok ? 'Subscribed! Talk soon.' : 'Something went wrong.';
-      msg.style.color = res.ok ? 'var(--accent)' : '#ef4444';
-      msg.style.display = 'block';
-      if (res.ok) (form as HTMLFormElement).reset();
-    } catch { msg.textContent = 'Network error.'; msg.style.display = 'block'; }
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      msg.textContent = res.ok ? 'Subscribed! Talk soon.' : 'Something went wrong — try again.';
+      msg.classList.remove('hidden', 'text-red-400');
+      msg.classList.add(res.ok ? 'text-brand-400' : 'text-red-400');
+      if (res.ok) form.reset();
+    } catch {
+      msg.textContent = 'Network error — try again.';
+      msg.classList.remove('hidden');
+    }
   });
 </script>
-</body>
-</html>

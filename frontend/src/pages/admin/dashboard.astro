@@ -17,8 +17,6 @@ export const prerender = false;
     [data-theme="light"]{--bg:#f7f6f3;--bg-subtle:#ffffff;--bg-hover:#eeede8;--border:#dddbd4;--border-light:#e8e6e0;--text-primary:#1a1a2e;--text-secondary:#4a4a6a;--text-muted:#8a8a9a;--accent:#4338ca;--accent-hover:#3730a3;--accent-dim:#eef2ff;--accent-border:#a5b4fc;--green:#16a34a;--red:#dc2626}
     body{font-family:var(--font-body);font-size:1rem;background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased}
     a{color:inherit;text-decoration:none}
-
-    /* Sidebar layout */
     .layout{display:flex;min-height:100vh}
     .sidebar{width:220px;flex-shrink:0;background:var(--bg-subtle);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:0.35rem;position:fixed;top:0;bottom:0;overflow-y:auto}
     .sidebar-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:700;padding:0 0.5rem;margin-bottom:1.5rem}
@@ -30,37 +28,65 @@ export const prerender = false;
     .sidebar-bottom{margin-top:auto}
     .logout-btn{width:100%;padding:0.6rem 0.75rem;background:none;border:none;border-radius:8px;font-family:var(--font-body);font-size:0.9rem;font-weight:500;color:var(--red);cursor:pointer;text-align:left;display:flex;align-items:center;gap:0.6rem}
     .logout-btn:hover{background:var(--bg-hover)}
-
-    /* Main content */
-    .main{margin-left:220px;flex:1;padding:2.5rem;max-width:900px}
+    .main{margin-left:220px;flex:1;padding:2.5rem;max-width:960px}
     .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
     h1{font-family:var(--font-display);font-size:1.75rem;font-weight:700}
     .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:var(--font-body);font-size:0.875rem;font-weight:600;cursor:pointer;transition:background 0.15s;text-decoration:none}
     .btn-primary:hover{background:var(--accent-hover)}
-
-    /* Posts table */
     .table-wrap{background:var(--bg-subtle);border:1px solid var(--border);border-radius:12px;overflow:hidden}
     table{width:100%;border-collapse:collapse}
     thead{background:var(--bg-hover)}
-    th{padding:0.9rem 1.1rem;text-align:left;font-size:0.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:500}
-    td{padding:0.9rem 1.1rem;font-size:0.9rem;color:var(--text-secondary);border-top:1px solid var(--border-light)}
-    .post-title{font-weight:600;color:var(--text-primary);font-size:0.9375rem}
-    .post-section{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)}
+    th{padding:0.9rem 1.1rem;text-align:left;font-size:0.75rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:500}
+    td{padding:0.9rem 1.1rem;font-size:0.9rem;color:var(--text-secondary);border-top:1px solid var(--border-light);vertical-align:middle}
+    .post-title{font-weight:600;color:var(--text-primary);font-size:0.9375rem;margin-bottom:2px}
+    .post-tag{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted)}
     .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:0.72rem;font-weight:600;font-family:var(--font-mono)}
     .badge-published{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
-    .badge-draft{background:var(--bg-hover);color:var(--text-muted)}
-    .actions{display:flex;align-items:center;gap:0.5rem}
-    .action-btn{padding:5px 12px;border-radius:7px;font-size:0.78rem;font-weight:600;font-family:var(--font-body);cursor:pointer;border:1px solid var(--border);background:none;color:var(--text-secondary);transition:all 0.15s}
-    .action-btn:hover{border-color:var(--accent);color:var(--accent)}
-    .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
-    .action-btn.publish:hover{border-color:var(--green);color:var(--green)}
+    .badge-draft{background:var(--bg-hover);color:var(--text-muted);border:1px solid var(--border)}
+    .actions{display:flex;align-items:center;gap:0.4rem;flex-wrap:nowrap}
+
+    /* Action buttons — explicit styles, no hover cascade issues */
+    .btn-action{
+      padding:5px 13px;border-radius:7px;font-size:0.78rem;font-weight:600;
+      font-family:var(--font-body);cursor:pointer;border:1.5px solid var(--border);
+      background:none;color:var(--text-secondary);transition:border-color 0.15s,color 0.15s,background 0.15s;
+      white-space:nowrap;
+    }
+    .btn-action:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-action:disabled{opacity:0.5;cursor:not-allowed}
+
+    .btn-publish{border-color:color-mix(in srgb,var(--green) 40%,transparent);color:var(--green)}
+    .btn-publish:hover{background:color-mix(in srgb,var(--green) 10%,transparent);border-color:var(--green)}
+
+    .btn-unpublish{border-color:color-mix(in srgb,var(--text-muted) 40%,transparent);color:var(--text-muted)}
+    .btn-unpublish:hover{background:var(--bg-hover);border-color:var(--text-secondary);color:var(--text-secondary)}
+
+    .btn-delete{border-color:color-mix(in srgb,var(--red) 30%,transparent);color:var(--red)}
+    .btn-delete:hover{background:color-mix(in srgb,var(--red) 10%,transparent);border-color:var(--red)}
+
+    .btn-edit:hover{border-color:var(--accent);color:var(--accent)}
+
     .empty{padding:3rem;text-align:center;color:var(--text-muted);font-size:0.9rem}
     .loading{padding:3rem;text-align:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem}
+
+    /* Toast notification */
+    .toast{
+      position:fixed;bottom:1.5rem;right:1.5rem;
+      padding:0.75rem 1.25rem;border-radius:10px;
+      font-size:0.875rem;font-weight:500;
+      background:var(--bg-subtle);border:1px solid var(--border);
+      color:var(--text-primary);box-shadow:0 4px 24px rgba(0,0,0,0.3);
+      transform:translateY(20px);opacity:0;
+      transition:transform 0.2s,opacity 0.2s;
+      pointer-events:none;z-index:999;
+    }
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast.success{border-color:var(--green);color:var(--green)}
+    .toast.error{border-color:var(--red);color:var(--red)}
   </style>
 </head>
 <body>
 <div class="layout">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">qubits<span>to</span>ai</div>
     <a href="/admin/dashboard" class="nav-item active">
@@ -86,7 +112,6 @@ export const prerender = false;
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="main">
     <div class="page-header">
       <h1>All posts</h1>
@@ -110,12 +135,17 @@ export const prerender = false;
         </thead>
         <tbody id="posts-body"></tbody>
       </table>
-      <div class="empty" id="empty" style="display:none">No posts yet. <a href="/admin/posts/new" style="color:var(--accent)">Write your first one →</a></div>
+      <div class="empty" id="empty" style="display:none">
+        No posts yet. <a href="/admin/posts/new" style="color:var(--accent)">Write your first one →</a>
+      </div>
     </div>
   </main>
 </div>
 
-<script>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script is:inline>
   const token = localStorage.getItem('admin_token');
   if (!token) window.location.href = '/admin/login';
 
@@ -128,56 +158,162 @@ export const prerender = false;
     window.location.href = '/admin/login';
   });
 
+  // ── Toast helper ────────────────────────────────────────────────────────
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (type || '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── Load posts ──────────────────────────────────────────────────────────
   async function loadPosts() {
     const res = await fetch('/api/v1/admin/posts', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': 'Bearer ' + token }
     });
     if (res.status === 401) { window.location.href = '/admin/login'; return; }
-    const posts = await res.json();
 
+    const posts = await res.json();
     document.getElementById('loading').style.display = 'none';
-    if (!posts.length) {
+
+    if (!posts || !posts.length) {
       document.getElementById('empty').style.display = 'block';
       return;
     }
+
     document.getElementById('posts-table').style.display = 'table';
     const tbody = document.getElementById('posts-body');
-    tbody.innerHTML = posts.map(p => `
-      <tr>
-        <td>
-          <div class="post-title">${p.title}</div>
-          <div class="post-section">${p.tag}</div>
-        </td>
-        <td><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text-muted)">${p.section_slug || '—'}</span></td>
-        <td><span class="badge ${p.published ? 'badge-published' : 'badge-draft'}">${p.published ? 'Published' : 'Draft'}</span></td>
-        <td style="font-size:0.8rem;font-family:var(--font-mono)">${new Date(p.updated_at).toLocaleDateString()}</td>
-        <td>
-          <div class="actions">
-            <a href="/admin/posts/${p.id}/edit" class="action-btn">Edit</a>
-            <button class="action-btn publish" onclick="togglePublish(${p.id}, ${p.published})">${p.published ? 'Unpublish' : 'Publish'}</button>
-            <button class="action-btn danger" onclick="deletePost(${p.id})">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = '';
+
+    posts.forEach(function(p) {
+      const tr = document.createElement('tr');
+      tr.dataset.id = p.id;
+
+      // Title cell
+      const tdTitle = document.createElement('td');
+      tdTitle.innerHTML =
+        '<div class="post-title">' + escHtml(p.title) + '</div>' +
+        '<div class="post-tag">' + escHtml(p.tag || '') + '</div>';
+
+      // Section cell
+      const tdSection = document.createElement('td');
+      tdSection.innerHTML = '<span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">' +
+        escHtml(p.section_slug || '—') + '</span>';
+
+      // Status cell
+      const tdStatus = document.createElement('td');
+      tdStatus.innerHTML = p.published
+        ? '<span class="badge badge-published">Published</span>'
+        : '<span class="badge badge-draft">Draft</span>';
+
+      // Date cell
+      const tdDate = document.createElement('td');
+      tdDate.style.cssText = 'font-size:0.78rem;font-family:var(--font-mono);color:var(--text-muted)';
+      tdDate.textContent = new Date(p.updated_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+
+      // Actions cell
+      const tdActions = document.createElement('td');
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'actions';
+
+      // Edit button
+      const editBtn = document.createElement('a');
+      editBtn.href = '/admin/posts/' + p.id + '/edit';
+      editBtn.className = 'btn-action btn-edit';
+      editBtn.textContent = 'Edit';
+
+      // Publish / Unpublish button
+      const pubBtn = document.createElement('button');
+      pubBtn.className = 'btn-action ' + (p.published ? 'btn-unpublish' : 'btn-publish');
+      pubBtn.textContent = p.published ? 'Unpublish' : 'Publish';
+      pubBtn.addEventListener('click', function() {
+        togglePublish(p.id, p.published, tr);
+      });
+
+      // Delete button
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn-action btn-delete';
+      delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', function() {
+        deletePost(p.id, tr);
+      });
+
+      actionsDiv.appendChild(editBtn);
+      actionsDiv.appendChild(pubBtn);
+      actionsDiv.appendChild(delBtn);
+      tdActions.appendChild(actionsDiv);
+
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdSection);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdDate);
+      tr.appendChild(tdActions);
+      tbody.appendChild(tr);
+    });
   }
 
-  async function togglePublish(id, isPublished) {
+  // ── Toggle publish ──────────────────────────────────────────────────────
+  async function togglePublish(id, isPublished, row) {
     const action = isPublished ? 'unpublish' : 'publish';
-    await fetch(`/api/v1/admin/posts/${id}/${action}`, {
+    const btns = row.querySelectorAll('button');
+    btns.forEach(function(b) { b.disabled = true; });
+
+    const res = await fetch('/api/v1/admin/posts/' + id + '/' + action, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': 'Bearer ' + token }
     });
-    loadPosts();
+
+    if (res.ok) {
+      showToast(isPublished ? 'Post unpublished' : 'Post published!', 'success');
+      loadPosts();
+    } else {
+      const data = await res.json().catch(function(){return {};});
+      showToast(data.error || 'Action failed', 'error');
+      btns.forEach(function(b) { b.disabled = false; });
+    }
   }
 
-  async function deletePost(id) {
-    if (!confirm('Delete this post? This cannot be undone.')) return;
-    await fetch(`/api/v1/admin/posts/${id}`, {
+  // ── Delete post ─────────────────────────────────────────────────────────
+  async function deletePost(id, row) {
+    if (!confirm('Delete this post permanently? This cannot be undone.')) return;
+
+    const btns = row.querySelectorAll('button');
+    btns.forEach(function(b) { b.disabled = true; });
+
+    const res = await fetch('/api/v1/admin/posts/' + id, {
       method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': 'Bearer ' + token }
     });
-    loadPosts();
+
+    if (res.ok) {
+      showToast('Post deleted', 'success');
+      // Remove the row directly instead of full reload
+      row.style.transition = 'opacity 0.2s';
+      row.style.opacity = '0';
+      setTimeout(function() {
+        row.remove();
+        // Show empty state if no rows left
+        const tbody = document.getElementById('posts-body');
+        if (!tbody.children.length) {
+          document.getElementById('posts-table').style.display = 'none';
+          document.getElementById('empty').style.display = 'block';
+        }
+      }, 200);
+    } else {
+      const data = await res.json().catch(function(){return {};});
+      showToast(data.error || 'Delete failed', 'error');
+      btns.forEach(function(b) { b.disabled = false; });
+    }
+  }
+
+  // ── Escape HTML helper ──────────────────────────────────────────────────
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
   }
 
   loadPosts();

@@ -8,36 +8,30 @@ try {
 } catch {}
 ---
 <Base title="Blog — qubitstoai">
-  <div class="max-w-4xl mx-auto px-6 py-16">
-    <div class="mb-12">
-      <div class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-3">Writing</div>
-      <h1 class="font-display text-4xl md:text-5xl font-700 tracking-tight">Blog</h1>
-      <p class="text-zinc-400 text-base mt-3 max-w-lg">Deep articles on CS fundamentals. Build-logs, explanations, and things I wish existed when I was learning.</p>
+  <div style="max-width:48rem;margin:0 auto;padding:4rem 1.75rem 6rem;">
+    <div style="margin-bottom:3rem;">
+      <div class="label" style="margin-bottom:0.6rem;">Writing</div>
+      <h1 style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.75rem;">Blog</h1>
+      <p style="color:var(--ink-3);font-size:var(--text-base);max-width:400px;line-height:1.7;">Deep articles on CS fundamentals. Explanations, build-logs, and things I wish existed when I was learning.</p>
     </div>
-
     {posts.length > 0 ? (
-      <div class="divide-y divide-zinc-800">
+      <div>
         {posts.map((post: any, i: number) => (
-          <a href={`/blog/${post.slug}`}
-             class="group flex items-start gap-6 py-7 hover:bg-zinc-900/30 -mx-4 px-4 rounded-lg transition-colors">
-            <span class="font-mono text-xs text-zinc-700 mt-1 w-6 shrink-0">{String(i+1).padStart(2,'0')}</span>
-            <div class="flex-1 min-w-0">
-              <div class="text-xs font-mono text-brand-400/70 mb-2">{post.tag}</div>
-              <h2 class="font-display font-600 text-zinc-100 group-hover:text-brand-400 transition-colors leading-snug text-lg">{post.title}</h2>
-              <p class="text-zinc-500 text-sm mt-2 leading-relaxed">{post.description}</p>
-              <div class="text-xs text-zinc-600 font-mono mt-3">{post.read_mins} min read</div>
+          <a href={`/blog/${post.slug}`} style="display:flex;align-items:flex-start;gap:1.25rem;padding:1.4rem 1rem;border-bottom:1px solid var(--border-light);border-radius:10px;text-decoration:none;transition:background 0.15s;" onmouseover="this.style.background='var(--bg-raised)'" onmouseout="this.style.background='transparent'">
+            <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--ink-4);margin-top:4px;width:22px;flex-shrink:0;">{String(i+1).padStart(2,'0')}</span>
+            <div style="flex:1;">
+              <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.3rem;">{post.tag}</div>
+              <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:0.35rem;">{post.title}</div>
+              {post.description && <div style="font-size:var(--text-sm);color:var(--ink-3);line-height:1.6;">{post.description}</div>}
+              <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--ink-4);margin-top:0.5rem;">{post.read_mins} min read</div>
             </div>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
-                 class="shrink-0 text-zinc-700 group-hover:text-brand-400 transition-colors mt-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
           </a>
         ))}
       </div>
     ) : (
-      <div class="border border-dashed border-zinc-800 rounded-xl p-16 text-center">
-        <div class="font-mono text-zinc-600 text-sm mb-3">// no posts yet</div>
-        <p class="text-zinc-500 text-sm">First articles are being written. <a href="/#newsletter" class="text-brand-400 hover:text-brand-200 transition-colors">Subscribe to be notified →</a></p>
+      <div style="border:1.5px dashed var(--border);border-radius:12px;padding:4rem;text-align:center;">
+        <div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--ink-4);margin-bottom:0.5rem;">// no posts yet</div>
+        <p style="color:var(--ink-3);font-size:var(--text-sm);">First articles are being written. <a href="/#newsletter">Subscribe to get notified →</a></p>
       </div>
     )}
   </div>

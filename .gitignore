@@ -9,3 +9,4 @@ backend/server
 *.log
 caddy_data/
 caddy_config/
+.DS_Store

@@ -1,66 +1,62 @@
 ---
 export const prerender = false;
 import Base from '../../../layouts/Base.astro';
-const { track: trackSlug, section: sectionSlug } = Astro.params;
+const { track: tSlug, section: sSlug } = Astro.params;
 const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
-let track: any = null, section: any = null, posts: any[] = [];
+let track: any=null, section: any=null, posts: any[]=[];
 try {
-  const [tr, sections, ps] = await Promise.all([
-    fetch(`${API}/api/v1/tracks/${trackSlug}`).then(r => r.ok ? r.json() : null),
-    fetch(`${API}/api/v1/tracks/${trackSlug}/sections`).then(r => r.ok ? r.json() : []),
-    fetch(`${API}/api/v1/tracks/${trackSlug}/sections/${sectionSlug}/posts`).then(r => r.ok ? r.json() : []),
+  const [tr,secs,ps] = await Promise.all([
+    fetch(`${API}/api/v1/tracks/${tSlug}`).then(r=>r.ok?r.json():null),
+    fetch(`${API}/api/v1/tracks/${tSlug}/sections`).then(r=>r.ok?r.json():[]),
+    fetch(`${API}/api/v1/tracks/${tSlug}/sections/${sSlug}/posts`).then(r=>r.ok?r.json():[]),
   ]);
-  track = tr;
-  section = (sections as any[]).find((s: any) => s.slug === sectionSlug) || null;
-  posts = ps;
+  track=tr; section=(secs as any[]).find((s:any)=>s.slug===sSlug)||null; posts=ps;
 } catch {}
-const colors: Record<string,string> = {
-  hardware:'var(--c-hardware)',systems:'var(--c-systems)',compilers:'var(--c-compilers)',
-  web:'var(--c-web)',ml:'var(--c-ml)',agents:'var(--c-agents)'
-};
-const color = colors[trackSlug as string] ?? 'var(--accent)';
+const dots: Record<string,string> = {hardware:'var(--c-hw)',systems:'var(--c-sy)',compilers:'var(--c-co)',web:'var(--c-wb)',ml:'var(--c-ml)',agents:'var(--c-ag)'};
+const dot = dots[tSlug as string] ?? 'var(--fg-3)';
 ---
 <Base title={section ? `${section.title} — qubitstoai` : 'Not found'}>
-  <div style="max-width:48rem;margin:0 auto;padding:3rem 1.5rem 6rem;">
-    {!track || !section ? (
-      <p style="color:var(--foreground-3);font-size:0.875rem;">Not found. <a href="/learn" style="color:var(--accent);">← Back</a></p>
-    ) : (
-      <>
-        <div style="display:flex;align-items:center;gap:0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--foreground-4);margin-bottom:2rem;">
-          <a href="/learn" style="color:var(--foreground-4);transition:color 0.1s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--foreground-4)'">Learn</a>
-          <span>/</span>
-          <a href={`/learn/${trackSlug}`} style="color:var(--foreground-4);transition:color 0.1s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--foreground-4)'">{track.title}</a>
-          <span>/</span>
-          <span style="color:var(--foreground-3);">{section.title}</span>
+<div style="max-width:48rem;margin:0 auto;padding:3rem 1.5rem 6rem;">
+  {!track||!section ? (
+    <p style="font-size:0.8125rem;color:var(--fg-3);">not found. <a href="/learn" style="color:var(--fg);text-decoration:underline;">← back</a></p>
+  ) : (
+    <>
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.6rem;color:var(--fg-4);margin-bottom:2rem;">
+        <a href="/learn" style="color:var(--fg-4);transition:color 0.1s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-4)'">learn</a>
+        <span>/</span>
+        <a href={`/learn/${tSlug}`} style="color:var(--fg-4);transition:color 0.1s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--fg-4)'">{track.title}</a>
+        <span>/</span>
+        <span style="color:var(--fg-3);">{section.title}</span>
+      </div>
+      <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+          <span style={`width:6px;height:6px;border-radius:50%;background:${dot};`}></span>
+          <span style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-4);">{track.title}</span>
         </div>
-        <div style="margin-bottom:2.5rem;padding-bottom:1.75rem;border-bottom:1px solid var(--border);">
-          <div style="margin-bottom:0.75rem;">
-            <span style={`font-family:var(--font-mono);font-size:0.65rem;padding:2px 8px;border-radius:var(--radius-sm);background:color-mix(in srgb,${color} 12%,var(--background-2));color:${color}`}>{track.title}</span>
-          </div>
-          <h1 style="font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;color:var(--foreground);margin-bottom:0.4rem;">{section.title}</h1>
-          <p style="font-size:0.875rem;color:var(--foreground-3);line-height:1.6;">{section.description}</p>
+        <h1 style="font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;color:var(--fg);margin-bottom:0.3rem;">{section.title}</h1>
+        <p style="font-size:0.75rem;color:var(--fg-3);line-height:1.65;">{section.description}</p>
+      </div>
+      {posts.length > 0 ? (
+        <div>
+          {posts.map((p: any, i: number) => (
+            <a href={`/blog/${p.slug}`} style="display:flex;align-items:flex-start;gap:0.875rem;padding:0.75rem 0.625rem;transition:background 0.1s;text-decoration:none;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:0.6rem;color:var(--fg-4);width:16px;flex-shrink:0;padding-top:2px;">{String(i+1).padStart(2,'0')}</span>
+              <div style="flex:1;">
+                <div style="font-size:0.8125rem;font-weight:500;color:var(--fg);line-height:1.4;">{p.title}</div>
+                {p.description && <div style="font-size:0.7rem;color:var(--fg-3);margin-top:0.2rem;line-height:1.5;">{p.description}</div>}
+                <div style="font-size:0.6rem;color:var(--fg-4);margin-top:0.3rem;">{p.read_mins} min read</div>
+              </div>
+              <svg width="12" height="12" fill="none" stroke="var(--fg-4)" stroke-width="1.5" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:3px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+          ))}
         </div>
-        {posts.length > 0 ? (
-          <div>
-            {posts.map((post: any, i: number) => (
-              <a href={`/blog/${post.slug}`} style="display:flex;align-items:flex-start;gap:1rem;padding:1rem 0.75rem;border-radius:var(--radius);transition:background 0.1s;text-decoration:none;" onmouseover="this.style.background='var(--background-2)'" onmouseout="this.style.background='transparent'">
-                <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--foreground-4);width:20px;flex-shrink:0;padding-top:3px;">{String(i+1).padStart(2,'0')}</span>
-                <div style="flex:1;">
-                  <div style="font-size:0.9375rem;font-weight:500;color:var(--foreground);line-height:1.4;margin-bottom:0.3rem;">{post.title}</div>
-                  {post.description && <div style="font-size:0.8rem;color:var(--foreground-3);line-height:1.5;">{post.description}</div>}
-                  <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--foreground-4);margin-top:0.35rem;">{post.read_mins} min read</div>
-                </div>
-                <svg width="14" height="14" fill="none" stroke="var(--foreground-4)" stroke-width="1.5" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:3px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <div style="border:1px dashed var(--border);border-radius:var(--radius-lg);padding:3rem;text-align:center;">
-            <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--foreground-4);margin-bottom:0.4rem;">// no articles yet</div>
-            <p style="font-size:0.875rem;color:var(--foreground-3);">Articles being written. <a href="/#newsletter" style="color:var(--accent);">Subscribe →</a></p>
-          </div>
-        )}
-      </>
-    )}
-  </div>
+      ) : (
+        <div style="padding:2.5rem;border:1px dashed var(--border);text-align:center;">
+          <div style="font-size:0.65rem;color:var(--fg-4);margin-bottom:0.35rem;">// no articles yet</div>
+          <p style="font-size:0.75rem;color:var(--fg-3);">articles being written. <a href="/#newsletter" style="color:var(--fg);text-decoration:underline;">subscribe →</a></p>
+        </div>
+      )}
+    </>
+  )}
+</div>
 </Base>

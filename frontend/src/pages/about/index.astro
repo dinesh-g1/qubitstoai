@@ -2,16 +2,16 @@
 import Base from '../../layouts/Base.astro';
 ---
 <Base title="About — qubitstoai">
-  <div style="max-width:42rem;margin:0 auto;padding:4rem 1.75rem 6rem;">
-    <div style="margin-bottom:3rem;">
-      <div class="label" style="margin-bottom:0.6rem;">About</div>
-      <h1 style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;">The why</h1>
+  <div style="max-width:42rem;margin:0 auto;padding:3.5rem 1.5rem 6rem;">
+    <div style="margin-bottom:2.5rem;padding-bottom:1.75rem;border-bottom:1px solid var(--border);">
+      <div style="font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--foreground-4);margin-bottom:0.5rem;">About</div>
+      <h1 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;color:var(--foreground);">The why</h1>
     </div>
     <article class="prose">
       <p>Most CS education starts too high up the stack. You learn Python, then frameworks, then you're "a developer" — but ask anyone who built their own CPU how differently they think about memory, performance, and abstractions. There's a clarity that only comes from understanding the ground floor.</p>
-      <p>This site is me building that understanding in public, from the very bottom. Every NAND gate, every assembly instruction, every OS scheduler decision — documented as I go, turned into articles so others can follow the same path.</p>
+      <p>This site is me building that understanding in public, from the very bottom. Every NAND gate, every assembly instruction, every OS scheduler decision — documented as I go.</p>
       <h2>How it works</h2>
-      <p>Six topics, explored out of genuine curiosity — not a structured course, not a curriculum with deadlines. Hardware first because I wanted to understand how a transistor becomes a thought. Systems because C is where abstraction meets metal. Web because it's where most software lives. ML and agents because that's where everything is heading.</p>
+      <p>Six topics, explored out of genuine curiosity — not a structured course, not a curriculum with deadlines. Hardware first because I wanted to understand how a transistor becomes a thought.</p>
       <h2>What you'll find here</h2>
       <ul>
         <li>Long-form articles — each one 8–15 minutes, no padding</li>
@@ -21,8 +21,8 @@ import Base from '../../layouts/Base.astro';
       <h2>The site itself</h2>
       <p>Built from scratch — Go backend, Astro frontend, PostgreSQL, self-hosted on a Hetzner VPS. Because if you're going to write about how computers work, your own site should demonstrate that knowledge.</p>
     </article>
-    <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);">
-      <a href="/#newsletter" class="btn-primary">Follow along →</a>
+    <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border);">
+      <a href="/#newsletter" class="btn btn-primary">Follow along →</a>
     </div>
   </div>
 </Base>

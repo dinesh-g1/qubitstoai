@@ -1,30 +1,31 @@
 ---
 import Base from '../../layouts/Base.astro';
 const tracks = [
-  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture, memory systems', color:'#7C3AED' },
-  { slug:'systems',   title:'Systems',            desc:'Assembly language, C programming, OS internals, shells',  color:'#059669' },
-  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, interpreters, runtimes',       color:'#D97706' },
-  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST APIs, system design, architecture', color:'#2563EB' },
-  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, transformers, LLMs',         color:'#DC2626' },
-  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomous agent systems',        color:'#16A34A' },
+  { slug:'hardware',  title:'Hardware',          desc:'NAND gates, circuits, CPU architecture',  color:'var(--c-hardware)'  },
+  { slug:'systems',   title:'Systems',            desc:'Assembly, C, OS internals, shells',       color:'var(--c-systems)'   },
+  { slug:'compilers', title:'Compilers & VMs',    desc:'Lexers, parsers, bytecode, runtimes',     color:'var(--c-compilers)' },
+  { slug:'web',       title:'Web & Backend',      desc:'HTTP, databases, REST, system design',    color:'var(--c-web)'       },
+  { slug:'ml',        title:'ML & Deep Learning', desc:'Linear algebra, neural nets, LLMs',       color:'var(--c-ml)'        },
+  { slug:'agents',    title:'AI Agents',          desc:'Planning, memory, tools, autonomy',       color:'var(--c-agents)'    },
 ];
 ---
 <Base title="Learn — qubitstoai">
-  <div style="max-width:52rem;margin:0 auto;padding:4rem 1.75rem 6rem;">
-    <div style="margin-bottom:3rem;">
-      <div class="label" style="margin-bottom:0.6rem;">Exploring</div>
-      <h1 style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.75rem;">Topics I explore</h1>
-      <p style="color:var(--ink-3);font-size:var(--text-base);max-width:440px;line-height:1.7;">Areas I find genuinely interesting — started from hardware because I wanted to understand how everything actually works.</p>
+  <div style="max-width:52rem;margin:0 auto;padding:3.5rem 1.5rem 6rem;">
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--foreground-4);margin-bottom:0.5rem;">Exploring</div>
+      <h1 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;color:var(--foreground);margin-bottom:0.5rem;">Topics I explore</h1>
+      <p style="font-size:0.875rem;color:var(--foreground-3);max-width:400px;line-height:1.6;">Areas I find genuinely interesting — started from hardware because I wanted to understand how everything actually works.</p>
     </div>
-    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    <div style="height:1px;background:var(--border);margin-bottom:1.5rem;"></div>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
       {tracks.map((track, i) => (
-        <a href={`/learn/${track.slug}`} style="display:flex;align-items:center;gap:1.25rem;padding:1.25rem 1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s,transform 0.15s;" onmouseover="this.style.borderColor='#C2C0BA';this.style.boxShadow='0 2px 12px rgba(0,0,0,0.07)';this.style.transform='translateX(3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';this.style.transform='none'">
-          <div style={`width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.1rem;flex-shrink:0;background:${track.color}12;color:${track.color};border:1px solid ${track.color}22`}>{i+1}</div>
+        <a href={`/learn/${track.slug}`} style="display:flex;align-items:center;gap:1rem;padding:1rem 1rem;background:var(--background-1);border:1px solid var(--border);border-radius:var(--radius-lg);transition:background 0.1s,border-color 0.1s;text-decoration:none;" onmouseover="this.style.background='var(--background-2)';this.style.borderColor='var(--background-3)'" onmouseout="this.style.background='var(--background-1)';this.style.borderColor='var(--border)'">
+          <div style={`width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:500;flex-shrink:0;background:color-mix(in srgb,${track.color} 12%,var(--background-2));color:${track.color}`}>{String(i+1).padStart(2,'0')}</div>
           <div style="flex:1;">
-            <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:0.25rem;">{track.title}</div>
-            <div style="font-size:var(--text-sm);color:var(--ink-4);">{track.desc}</div>
+            <div style="font-size:0.9375rem;font-weight:500;color:var(--foreground);margin-bottom:0.2rem;">{track.title}</div>
+            <div style="font-size:0.8rem;color:var(--foreground-4);">{track.desc}</div>
           </div>
-          <svg width="15" height="15" fill="none" stroke="var(--ink-4)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          <svg width="14" height="14" fill="none" stroke="var(--foreground-4)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </a>
       ))}
     </div>

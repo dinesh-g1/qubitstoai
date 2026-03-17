@@ -116,7 +116,7 @@ var migrations = []string{
 
 	// ── Seed tracks ────────────────────────────────────────────────────────
 	`INSERT INTO tracks (slug, title, description, color, icon, sort_order) VALUES
-		('hardware',  'Hardware',           'NAND gates, circuits, CPU architecture, memory systems',            '#7F77DD', 'cpu',      1),
+		('hardware',  'Hardware',           'Qubits, quantum circuits, quantum hardware, quantum computing',            '#7F77DD', 'cpu',      1),
 		('systems',   'Systems',            'Assembly language, C programming, OS internals, memory management', '#1D9E75', 'terminal', 2),
 		('compilers', 'Compilers & VMs',    'Lexers, parsers, bytecode, interpreters, virtual machines',         '#BA7517', 'code',     3),
 		('web',       'Web & Backend',      'HTTP, databases, REST APIs, system design, frontend development',   '#185FA5', 'globe',    4),

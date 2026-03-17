@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 const API = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 const tracks = [
-  { slug:'hardware',  title:'Hardware',          sub:'NAND gates → CPU',            dot:'var(--c-hw)' },
+  { slug:'hardware',  title:'Hardware',          sub:'Qubits → quantum hardware',            dot:'var(--c-hw)' },
   { slug:'systems',   title:'Systems',            sub:'Assembly → OS internals',     dot:'var(--c-sy)' },
   { slug:'compilers', title:'Compilers & VMs',    sub:'Lexers → bytecode',           dot:'var(--c-co)' },
   { slug:'web',       title:'Web & Backend',      sub:'HTTP → full-stack',           dot:'var(--c-wb)' },
@@ -70,7 +70,7 @@ try { const r = await fetch(`${API}/api/v1/posts`); if (r.ok) posts = await r.js
   <div class="hero">
     <div class="hero-pill"><span class="hero-dot"></span>building in public</div>
     <h1>Computer science,<br/>from the ground up.</h1>
-    <p class="hero-sub">From a single NAND gate to autonomous AI agents. Every layer explained, every concept built from scratch.</p>
+    <p class="hero-sub">From a single qubit to autonomous AI agents. Every layer explained, every concept built from scratch.</p>
     <div class="hero-btns">
       <a href="/learn" class="btn btn-primary">
         start exploring

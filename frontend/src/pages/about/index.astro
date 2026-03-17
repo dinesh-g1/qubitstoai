@@ -5,24 +5,31 @@ import Base from '../../layouts/Base.astro';
 <div style="max-width:40rem;margin:0 auto;padding:3rem 1.5rem 6rem;">
   <div style="padding-bottom:1.5rem;border-bottom:1px solid var(--border);margin-bottom:2rem;">
     <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--fg-4);margin-bottom:0.3rem;">about</div>
-    <h1 style="font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;color:var(--fg);">The why</h1>
+    <h1 style="font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;color:var(--fg);">Hey, I'm Dinesh.</h1>
   </div>
   <article class="prose">
-    <p>Most CS education starts too high up the stack. You learn Python, then frameworks, then you're "a developer" — but ask anyone who built their own CPU how differently they think about memory, performance, and abstractions. There's a clarity that only comes from understanding the ground floor.</p>
-    <p>This site is me building that understanding in public, from the very bottom. Every NAND gate, every assembly instruction, every OS scheduler decision — documented as I go.</p>
-    <h2>How it works</h2>
-    <p>Six topics, explored out of genuine curiosity — not a structured course, not a curriculum with deadlines. Hardware first because I wanted to understand how a transistor becomes a thought.</p>
-    <h2>What you'll find here</h2>
+    <p>I'm a software engineer, and this site is basically my public notebook.</p>
+    <p>For a while I kept feeling like there were gaps in my understanding — things I'd just accepted and moved on from. How does memory actually work? What's really happening when you run a program? I could build things, but I couldn't always explain <em>why</em> they worked. That bothered me.</p>
+    <p>So I started going back to the fundamentals. Not through a course or a bootcamp — just picking a topic, going deep, and writing down what I figured out. That's this site.</p>
+
+    <h2>What's here</h2>
+    <p>Right now I'm focused on Web & Backend, split into two threads:</p>
     <ul>
-      <li>Long-form articles — each one 8–15 minutes, no padding</li>
-      <li>Working code — every concept has a runnable implementation</li>
-      <li>Open source repos — everything is on GitHub</li>
+      <li><strong>Low Level Design</strong> — the programming and coding side. Data structures, algorithms, how systems actually work under the hood.</li>
+      <li><strong>High Level Design</strong> — the architecture side. How do you design systems that scale? What trade-offs are you actually making?</li>
     </ul>
-    <h2>The site itself</h2>
-    <p>Built from scratch — Go backend, Astro frontend, PostgreSQL, self-hosted on a Hetzner VPS. Because if you're going to write about how computers work, your own site should demonstrate that knowledge.</p>
+    <p>Eventually I want to cover hardware, compilers, ML — the whole stack from qubits up to AI agents. That's the ambition anyway. We'll see how far curiosity takes it.</p>
+
+    <h2>How I write</h2>
+    <p>I try to write the article I wish existed when I was confused about something. No fluff, no "in this article we will explore" — just the thing itself. Most posts are 8–15 minutes. Everything has working code.</p>
+
+    <h2>The site</h2>
+    <p>Built it myself — Go backend, Astro frontend, PostgreSQL for the database. I wanted to actually own the stack rather than plug into something managed. Feels right for a site about how computers work.</p>
+    <p>Hosted on <a href="https://www.e2enetworks.com/" target="_blank" rel="noopener noreferrer">E2E Networks</a> — an Indian cloud provider. Fast, solid, and it's nice to keep it local.</p>
   </article>
-  <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+  <div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;">
     <a href="/#newsletter" class="btn btn-primary">follow along →</a>
+    <a href="/blog" class="btn btn-ghost">read the blog →</a>
   </div>
 </div>
 </Base>

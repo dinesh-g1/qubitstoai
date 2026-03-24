@@ -31,33 +31,36 @@ const {
   <style>
     /* ── Minimal Neutral theme tokens ── */
 
-    /* Dark (default) */
+    /* Dark — atoms.co palette */
     :root, [data-theme="dark"] {
-      --bg:           #09090b;
-      --bg-card:      #18181b;
-      --bg-hover:     #27272a;
-      --bg-active:    #3f3f46;
+      --bg:           #0A0A08;
+      --bg-card:      #141412;
+      --bg-hover:     #1C1C19;
+      --bg-active:    #252521;
 
-      --border:       #27272a;
-      --border-s:     #3f3f46;
+      --border:       #282824;
+      --border-s:     #343430;
 
-      --fg:           #fafafa;
-      --fg-2:         #e4e4e7;
-      --fg-3:         #a1a1aa;
-      --fg-4:         #71717a;
+      --fg:           #E8E4DC;
+      --fg-2:         #C4BFB5;
+      --fg-3:         #8C8880;
+      --fg-4:         #585650;
 
-      --primary:      #fafafa;
-      --primary-fg:   #09090b;
-      --primary-hover:#e4e4e7;
+      --primary:      #E8E4DC;
+      --primary-fg:   #0A0A08;
+      --primary-hover:#D4CFC6;
 
-      --success:      #4ade80;
-      --warning:      #fbbf24;
-      --danger:       #f87171;
+      --success:      #6EBF8B;
+      --warning:      #C9A84C;
+      --danger:       #C96B5A;
 
-      --shadow-sm:    0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
-      --shadow:       0 4px 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-sm:    0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+      --shadow:       0 4px 12px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
 
-      --nav-bg:       rgba(9,9,11,0.90);
+      --nav-bg:       rgba(10,10,8,0.92);
+
+      /* Gold accent for big footer logo */
+      --footer-logo-color: #C9A96E;
     }
 
     /* Light */
@@ -87,6 +90,9 @@ const {
       --shadow:       0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
 
       --nav-bg:       rgba(250,250,250,0.90);
+
+      /* In light mode, wordmark is dark ink */
+      --footer-logo-color: var(--fg);
     }
 
     /* Track dots — same in both modes */
@@ -195,17 +201,35 @@ const {
     .mobile-inner a { padding: 7px 10px; border-radius: var(--r-sm); font-size: 0.8125rem; color: var(--fg-3); transition: background 0.1s, color 0.1s; }
     .mobile-inner a:hover { background: var(--bg-hover); color: var(--fg); }
 
-    /* ── Footer ── */
-    footer { border-top: 1px solid var(--border); background: var(--bg-card); margin-top: 6rem; transition: background 0.15s, border-color 0.15s; }
-    .footer-grid { max-width: 72rem; margin: 0 auto; padding: 2.5rem 1.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
-    .footer-logo { font-size: 0.8125rem; font-weight: 700; color: var(--fg); margin-bottom: 0.5rem; }
-    .footer-logo span { color: var(--fg-4); }
-    .footer-desc { font-size: 0.72rem; color: var(--fg-3); line-height: 1.7; max-width: 22rem; }
-    .footer-ht { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-4); margin-bottom: 0.7rem; }
-    .footer-links { display: flex; flex-direction: column; gap: 0.3rem; }
-    .footer-links a { font-size: 0.72rem; color: var(--fg-3); transition: color 0.1s; }
-    .footer-links a:hover { color: var(--fg); }
-    .footer-bottom { border-top: 1px solid var(--border); max-width: 72rem; margin: 0 auto; padding: 0.875rem 1.5rem; display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--fg-4); }
+    /* ── Footer — atoms.co style ── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      margin-top: 6rem;
+      overflow: hidden;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .footer-wordmark {
+      font-family: var(--font);
+      font-size: clamp(4rem, 18vw, 14rem);
+      font-weight: 700;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      padding: 1.5rem 1.5rem 0;
+      /* gold in dark, dark ink in light */
+      color: var(--footer-logo-color, var(--fg));
+      user-select: none;
+    }
+    .footer-bottom {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.5rem 1.5rem;
+      padding: 1rem 1.5rem 1.5rem;
+      font-size: 0.65rem;
+      border-top: none;
+    }
+    .footer-bottom span { color: var(--fg-4); }
+    .footer-bottom a { color: var(--fg-3); transition: color 0.1s; }
+    .footer-bottom a:hover { color: var(--fg); }
 
     /* ── Prose — for articles ── */
     .prose { font-size: 0.9rem; line-height: 1.85; color: var(--fg-2); }
@@ -286,37 +310,21 @@ const {
     <slot />
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER — atoms.co style -->
   <footer>
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">qubits<span>to</span>ai</div>
-        <p class="footer-desc">Computer science from the ground up. No shortcuts — deep understanding built layer by layer.</p>
-      </div>
-      <div>
-        <div class="footer-ht">Explore</div>
-        <div class="footer-links">
-          <a href="/learn/hardware">Hardware</a>
-          <a href="/learn/systems">Systems</a>
-          <a href="/learn/compilers">Compilers</a>
-          <a href="/learn/web">Web</a>
-          <a href="/learn/ml">ML</a>
-          <a href="/learn/agents">AI Agents</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-ht">Connect</div>
-        <div class="footer-links">
-          <a href="https://github.com/qubitstoai">GitHub</a>
-          <a href="https://youtube.com/@qubitstoai">YouTube</a>
-          <a href="https://x.com/qubitstoai">X / Twitter</a>
-          <a href="/rss.xml">RSS</a>
-        </div>
-      </div>
-    </div>
+    <div class="footer-wordmark">qubitstoai</div>
     <div class="footer-bottom">
-      <span>© 2026 qubitstoai.com</span>
-      <span>from qubits to ai agents</span>
+      <span>© 2025 qubitstoai.com</span>
+      <a href="/learn">learn</a>
+      <a href="/blog">blog</a>
+      <a href="/projects">projects</a>
+      <a href="/about">about</a>
+      <a href="/learn/hardware">hardware</a>
+      <a href="/learn/web">web</a>
+      <a href="/learn/ml">ml</a>
+      <a href="/learn/agents">ai agents</a>
+      <a href="https://github.com/qubitstoai" target="_blank">github</a>
+      <a href="https://x.com/qubitstoai" target="_blank">x / twitter</a>
     </div>
   </footer>
 
